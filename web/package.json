@@ -1,0 +1,12 @@
+{
+  "name": "multiway-register-machines-web",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Static explorer for multiway register machines; the engine is the mrm Python wheel running in Pyodide",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "typescript": "~5.6.3"
+  }
+}

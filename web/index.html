@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Multiway Register Machine Explorer</title>
+<meta name="description"
+      content="Explore multiway register machine evolutions in the browser. The same Python engine that backs the paper runs here through Pyodide.">
+<link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+<header class="topbar">
+  <h1>Multiway Register Machine Explorer</h1>
+  <p class="tagline">
+    The engine is the
+    <a href="https://github.com/MathMaster1296/multiway-register-machines">mrm Python package</a>
+    running in your browser through Pyodide, so this page and the paper cannot disagree.
+  </p>
+</header>
+
+<div id="banner" class="banner" hidden></div>
+
+<main class="panes">
+  <section class="pane pane-editor" aria-label="Machine editor">
+    <h2>Machine</h2>
+    <label class="preset-row">
+      <span>Preset</span>
+      <select id="preset-select" aria-label="Preset machine"></select>
+    </label>
+    <p id="preset-description" class="muted"></p>
+    <div id="editor-host"></div>
+    <h2>Evolution</h2>
+    <div class="controls-grid">
+      <label><span>Mode</span>
+        <select id="mode-select">
+          <option value="states">states (merge)</option>
+          <option value="tree">tree (all paths)</option>
+        </select>
+      </label>
+      <label><span>Max steps</span><input id="max-steps" type="text" size="6" value="60"></label>
+      <label><span>Max states</span><input id="max-states" type="text" size="8" value="20000"></label>
+      <label><span>Max frontier</span><input id="max-frontier" type="text" size="8" value="10000"></label>
+    </div>
+    <div class="button-row">
+      <button id="run-button">run</button>
+      <button id="cancel-button">cancel</button>
+    </div>
+  </section>
+
+  <section class="pane pane-graph" aria-label="Evolution graph">
+    <div class="graph-toolbar">
+      <button id="play-button">play</button>
+      <input id="step-slider" type="range" min="0" max="0" value="0"
+             aria-label="Visible evolution step">
+      <span id="step-readout" aria-live="polite">step 0 / 0</span>
+      <label class="toggle"><input id="branchial-toggle" type="checkbox"> branchial</label>
+      <label class="toggle"><input id="table-toggle" type="checkbox"> table view</label>
+    </div>
+    <div id="graph-host" class="graph-host">
+      <div id="engine-status" class="engine-status" role="status">Loading</div>
+    </div>
+    <p id="canvas-note" class="muted small" hidden>
+      Large graph: canvas rendering without labels; graphs under 2000 nodes get interactive SVG.
+    </p>
+    <div id="table-host" class="table-host" hidden></div>
+  </section>
+
+  <section class="pane pane-stats" aria-label="Statistics">
+    <h2>Statistics</h2>
+    <div id="stats-body"></div>
+    <h2>Export</h2>
+    <div class="button-row">
+      <button id="export-svg">SVG</button>
+      <button id="export-png">PNG</button>
+      <button id="export-json">JSON</button>
+    </div>
+    <p class="muted small">
+      The URL always encodes the current machine and settings; copy it to
+      reproduce this exact view.
+    </p>
+  </section>
+</main>
+
+<script type="module" src="js/main.js"></script>
+<noscript><p class="banner error">This explorer needs JavaScript and WebAssembly.</p></noscript>
+</body>
+</html>
