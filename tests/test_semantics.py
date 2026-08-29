@@ -245,3 +245,42 @@ class TestComplexity:
     def test_deterministic_machine_has_complexity_one(self):
         prog = [[1, 0, [2]], [1, 1, [1], [3]]]
         assert complexity(instructions_from_wfr(prog)) == 1.0
+
+
+class TestSmallEdgeCases:
+    def test_complexity_of_empty_program_is_an_error(self):
+        with pytest.raises(ValueError, match="empty"):
+            complexity(())
+
+    def test_machine_needs_at_least_one_instruction(self):
+        from mrm import machine_from_instructions
+
+        with pytest.raises(ValueError, match="at least one"):
+            machine_from_instructions(())
+
+    def test_instruction_rejects_bad_register_and_inc_fail_branch(self):
+        from mrm import Instruction
+
+        with pytest.raises(ValueError, match=">= 1"):
+            Instruction(0, "inc", (1,))
+        with pytest.raises(ValueError, match="fail branch"):
+            Instruction(1, "inc", (1,), (2,))
+
+    def test_modular_condition_requires_modulus_at_evaluation(self):
+        with pytest.raises(ValueError, match="modulus"):
+            Condition(1, "%==", 1).holds((3,))
+
+    def test_halt_pc_with_rules_is_reported(self):
+        machine = Machine(
+            n_registers=1,
+            rules=(Rule("r", 2, (), (), 1),),
+            halt_pcs=frozenset({2}),
+        )
+        assert any("halt pc" in p for p in machine.validate())
+
+    def test_evolution_methods_delegate(self):
+        ev = evolve(machine_from_wfr([[1, 0, [2]], [1, 0, [4]]], 1), Config(1, (0,)))
+        assert ev.states_graph().nodes == (1, 2, 3)
+        assert ev.branchial_graph(1).nodes == (2,)
+        assert ev.path_counts()[3] == 1
+        assert ev.to_json()["schema"] == "mrm/evolution/1"

@@ -16,9 +16,13 @@ from __future__ import annotations
 from collections.abc import Iterable
 from dataclasses import dataclass
 from enum import Enum
-from typing import Literal, NamedTuple
+from typing import TYPE_CHECKING, Literal, NamedTuple
 
 from .machine import Config, Machine
+
+if TYPE_CHECKING:
+    from .counting import PathCount
+    from .graph import Graph
 
 NodeId = int
 
@@ -63,6 +67,30 @@ class Evolution:
     def growth_series(self) -> list[int]:
         """``|layer[t]|`` for each step ``t``."""
         return [len(layer) for layer in self.layers]
+
+    def states_graph(self) -> Graph:
+        """The multiway states graph; see `mrm.graph.states_graph`."""
+        from .graph import states_graph
+
+        return states_graph(self)
+
+    def branchial_graph(self, step: int) -> Graph:
+        """The branchial graph at ``step``; see `mrm.graph.branchial_graph`."""
+        from .graph import branchial_graph
+
+        return branchial_graph(self, step)
+
+    def path_counts(self) -> dict[NodeId, int | PathCount]:
+        """Path counts per node; see `mrm.counting.path_counts`."""
+        from .counting import path_counts
+
+        return path_counts(self)
+
+    def to_json(self) -> dict[str, object]:
+        """The ``mrm/evolution/1`` document; see `mrm.serialize`."""
+        from .serialize import evolution_to_json
+
+        return evolution_to_json(self)
 
     def simple_edges(self) -> list[tuple[NodeId, NodeId]]:
         """Edges collapsed to ``(src, dst)`` pairs, first occurrence order.
@@ -142,9 +170,10 @@ def evolve(
     run = _Run(machine, max_states)
     truncation_reason: str | None = None
     ids: dict[Config, NodeId] = {}
+    layer0: list[NodeId] = []
+    next_frontier: list[NodeId] = []
 
     try:
-        layer0: list[NodeId] = []
         for config in initials:
             if mode == "states":
                 if config in ids:
@@ -159,7 +188,7 @@ def evolve(
         for _ in range(max_steps):
             if not frontier:
                 break
-            next_frontier: list[NodeId] = []
+            next_frontier = []
             for node_id in frontier:
                 for rule, successor in machine.step(run.nodes[node_id]):
                     if mode == "states":
@@ -180,6 +209,13 @@ def evolve(
             frontier = next_frontier
     except _Truncated as t:
         truncation_reason = t.reason
+        # Keep partially discovered nodes addressable: every node belongs to
+        # exactly one layer even when a cap fired mid-level.
+        if not run.layers:
+            if layer0:
+                run.layers.append(layer0)
+        elif next_frontier and run.layers[-1] is not next_frontier:
+            run.layers.append(next_frontier)
 
     has_outgoing = {edge.src for edge in run.edges}
     terminals: dict[NodeId, TerminalKind] = {}
