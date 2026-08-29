@@ -87,11 +87,13 @@ export class StatsPane {
       entries.push(["complexity", result.complexity.toFixed(4)]);
     }
     for (const [term, value] of entries) {
+      const tile = document.createElement("div");
       const dt = document.createElement("dt");
       dt.textContent = term;
       const dd = document.createElement("dd");
       dd.textContent = value;
-      summary.append(dt, dd);
+      tile.append(dt, dd);
+      summary.append(tile);
     }
     this.root.append(summary);
 
@@ -149,7 +151,7 @@ export class StatsPane {
     if (selected !== null) {
       const p = document.createElement("p");
       p.className = "muted";
-      p.textContent = `selected state ${selected}: ancestors amber, descendants blue`;
+      p.textContent = `state ${selected} selected: ancestors in orange, descendants outlined in blue`;
       this.root.append(p);
     }
   }
@@ -168,6 +170,7 @@ export class StatsPane {
       const bar = document.createElementNS(SVG_NS, "rect");
       const barHeight = Math.max(1, (value / top) * (height - 14));
       bar.setAttribute("x", String(index * barWidth + 1));
+      bar.setAttribute("rx", "2");
       bar.setAttribute("y", String(height - barHeight));
       bar.setAttribute("width", String(Math.max(1, barWidth - 2)));
       bar.setAttribute("height", String(barHeight));

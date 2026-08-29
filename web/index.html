@@ -10,12 +10,28 @@
 </head>
 <body>
 <header class="topbar">
-  <h1>Multiway Register Machine Explorer</h1>
+  <div class="brand">
+    <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+      <g fill="none" stroke="#2a78d6" stroke-width="1.8">
+        <line x1="13" y1="6" x2="6" y2="19"/>
+        <line x1="13" y1="6" x2="20" y2="19"/>
+        <line x1="6" y1="19" x2="20" y2="19"/>
+      </g>
+      <circle cx="13" cy="5" r="3.4" fill="#2a78d6"/>
+      <circle cx="5.5" cy="20" r="3.4" fill="#eb6834"/>
+      <circle cx="20.5" cy="20" r="3.4" fill="#eda100"/>
+    </svg>
+    <h1>Multiway Register Machine Explorer</h1>
+  </div>
   <p class="tagline">
-    The engine is the
-    <a href="https://github.com/MathMaster1296/multiway-register-machines">mrm Python package</a>
-    running in your browser through Pyodide, so this page and the paper cannot disagree.
+    Every graph on this page is computed by the same
+    <a href="https://github.com/MathMaster1296/multiway-register-machines">Python engine</a>
+    the paper uses, running in your browser through Pyodide.
   </p>
+  <nav class="top-links" aria-label="Project links">
+    <a href="https://github.com/MathMaster1296/multiway-register-machines">source</a>
+    <a href="https://resources.wolframcloud.com/FunctionRepository/resources/MultiwayRegisterMachine/">WFR original</a>
+  </nav>
 </header>
 
 <div id="banner" class="banner" hidden></div>
@@ -27,7 +43,7 @@
       <span>Preset</span>
       <select id="preset-select" aria-label="Preset machine"></select>
     </label>
-    <p id="preset-description" class="muted"></p>
+    <p id="preset-description" class="muted small"></p>
     <div id="editor-host"></div>
     <h2>Evolution</h2>
     <div class="controls-grid">
@@ -43,7 +59,7 @@
     </div>
     <div class="button-row">
       <button id="run-button">run</button>
-      <button id="cancel-button">cancel</button>
+      <button id="cancel-button" class="quiet">cancel</button>
     </div>
   </section>
 
@@ -60,7 +76,8 @@
       <div id="engine-status" class="engine-status" role="status">Loading</div>
     </div>
     <p id="canvas-note" class="muted small" hidden>
-      Large graph: canvas rendering without labels; graphs under 2000 nodes get interactive SVG.
+      Large graph: drawn on a canvas without labels. Graphs under 2000 nodes
+      get the interactive view.
     </p>
     <div id="table-host" class="table-host" hidden></div>
   </section>
@@ -70,13 +87,13 @@
     <div id="stats-body"></div>
     <h2>Export</h2>
     <div class="button-row">
-      <button id="export-svg">SVG</button>
-      <button id="export-png">PNG</button>
-      <button id="export-json">JSON</button>
+      <button id="export-svg" class="quiet">SVG</button>
+      <button id="export-png" class="quiet">PNG</button>
+      <button id="export-json" class="quiet">JSON</button>
     </div>
     <p class="muted small">
-      The URL always encodes the current machine and settings; copy it to
-      reproduce this exact view.
+      The URL always encodes the current machine and settings, so copying the
+      address reproduces this exact view.
     </p>
   </section>
 </main>
