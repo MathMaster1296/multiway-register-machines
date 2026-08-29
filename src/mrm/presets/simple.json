@@ -1,0 +1,114 @@
+{
+ "schema": "mrm/machine/1",
+ "name": "Simple multiway machine",
+ "description": "The notebook's four-instruction warm-up machine.",
+ "n_registers": 2,
+ "rules": [
+  {
+   "id": "i1s1",
+   "pc_from": 1,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": 1
+    }
+   ],
+   "pc_to": 2
+  },
+  {
+   "id": "i2s1",
+   "pc_from": 2,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 2,
+     "delta": 1
+    }
+   ],
+   "pc_to": 3
+  },
+  {
+   "id": "i2s2",
+   "pc_from": 2,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 2,
+     "delta": 1
+    }
+   ],
+   "pc_to": 4
+  },
+  {
+   "id": "i3s1",
+   "pc_from": 3,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": 1
+    }
+   ],
+   "pc_to": 4
+  },
+  {
+   "id": "i4s1",
+   "pc_from": 4,
+   "guard": [
+    {
+     "reg": 1,
+     "op": ">",
+     "value": 0
+    }
+   ],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": -1
+    }
+   ],
+   "pc_to": 1
+  }
+ ],
+ "halt_pcs": [],
+ "instructions": [
+  [
+   1,
+   0,
+   [
+    2
+   ]
+  ],
+  [
+   2,
+   0,
+   [
+    3,
+    4
+   ]
+  ],
+  [
+   1,
+   0,
+   [
+    4
+   ]
+  ],
+  [
+   1,
+   1,
+   [
+    1
+   ],
+   []
+  ]
+ ],
+ "initial": [
+  1,
+  [
+   0,
+   0
+  ]
+ ]
+}

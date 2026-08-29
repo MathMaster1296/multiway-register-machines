@@ -1,0 +1,52 @@
+{
+ "schema": "mrm/machine/1",
+ "name": "Grid paths",
+ "description": "Walk from (0, 0) to (3, 3) by unit steps right or up. In states mode the path count to the terminal is binomial(6, 3) = 20.",
+ "n_registers": 2,
+ "rules": [
+  {
+   "id": "right",
+   "pc_from": 1,
+   "guard": [
+    {
+     "reg": 1,
+     "op": "<",
+     "value": 3
+    }
+   ],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": 1
+    }
+   ],
+   "pc_to": 1
+  },
+  {
+   "id": "up",
+   "pc_from": 1,
+   "guard": [
+    {
+     "reg": 2,
+     "op": "<",
+     "value": 3
+    }
+   ],
+   "updates": [
+    {
+     "reg": 2,
+     "delta": 1
+    }
+   ],
+   "pc_to": 1
+  }
+ ],
+ "halt_pcs": [],
+ "initial": [
+  1,
+  [
+   0,
+   0
+  ]
+ ]
+}

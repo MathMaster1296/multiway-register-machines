@@ -1,0 +1,51 @@
+{
+ "schema": "mrm/machine/1",
+ "name": "Fibonacci recursion",
+ "description": "F(k) -> F(k-1), F(k-2) with base cases at k = 1 and k = 2. The states graph is a line of 20 nodes, yet the number of distinct paths to the base cases is F(20) = 6765.",
+ "n_registers": 1,
+ "rules": [
+  {
+   "id": "f1",
+   "pc_from": 1,
+   "guard": [
+    {
+     "reg": 1,
+     "op": ">=",
+     "value": 3
+    }
+   ],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": -1
+    }
+   ],
+   "pc_to": 1
+  },
+  {
+   "id": "f2",
+   "pc_from": 1,
+   "guard": [
+    {
+     "reg": 1,
+     "op": ">=",
+     "value": 3
+    }
+   ],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": -2
+    }
+   ],
+   "pc_to": 1
+  }
+ ],
+ "halt_pcs": [],
+ "initial": [
+  1,
+  [
+   20
+  ]
+ ]
+}

@@ -1,0 +1,95 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://github.com/MathMaster1296/multiway-register-machines/docs/evolution.schema.json",
+ "title": "mrm/evolution/1",
+ "description": "A complete evolution result: the machine, the parameters that produced it, the node/edge/layer data, terminal classification, terminal path counts, growth series, truncation status, and a generator block tying the document to the package version and a hash of the machine.",
+ "type": "object",
+ "required": [
+  "schema", "machine", "parameters", "nodes", "edges", "layers",
+  "terminals", "path_counts", "growth_series", "truncated",
+  "truncation_reason", "generator"
+ ],
+ "properties": {
+  "schema": {"const": "mrm/evolution/1"},
+  "machine": {"$ref": "machine.schema.json"},
+  "parameters": {
+   "type": "object",
+   "required": ["mode", "max_steps", "max_states", "max_frontier", "initial"],
+   "properties": {
+    "mode": {"enum": ["states", "tree"]},
+    "max_steps": {"type": "integer", "minimum": 0},
+    "max_states": {"type": "integer", "minimum": 1},
+    "max_frontier": {"type": "integer", "minimum": 1},
+    "initial": {
+     "type": "array",
+     "items": {
+      "type": "array",
+      "prefixItems": [
+       {"type": "integer", "minimum": 1},
+       {"type": "array", "items": {"type": "integer", "minimum": 0}}
+      ],
+      "minItems": 2,
+      "maxItems": 2
+     }
+    }
+   },
+   "additionalProperties": false
+  },
+  "nodes": {
+   "type": "array",
+   "items": {
+    "type": "array",
+    "prefixItems": [
+     {"type": "integer", "minimum": 1},
+     {"type": "integer", "minimum": 1},
+     {"type": "array", "items": {"type": "integer", "minimum": 0}}
+    ],
+    "minItems": 3,
+    "maxItems": 3
+   }
+  },
+  "edges": {
+   "type": "array",
+   "items": {
+    "type": "array",
+    "prefixItems": [
+     {"type": "integer", "minimum": 1},
+     {"type": "integer", "minimum": 1},
+     {"type": "string"}
+    ],
+    "minItems": 3,
+    "maxItems": 3
+   }
+  },
+  "layers": {
+   "type": "array",
+   "items": {"type": "array", "items": {"type": "integer", "minimum": 1}}
+  },
+  "terminals": {
+   "type": "object",
+   "additionalProperties": {"enum": ["halt", "stuck", "cutoff"]}
+  },
+  "path_counts": {
+   "type": "object",
+   "additionalProperties": {
+    "anyOf": [{"type": "integer", "minimum": 0}, {"const": "infinite"}]
+   }
+  },
+  "growth_series": {"type": "array", "items": {"type": "integer", "minimum": 0}},
+  "truncated": {"type": "boolean"},
+  "truncation_reason": {
+   "anyOf": [{"type": "null"}, {"enum": ["max_steps", "max_states", "max_frontier"]}]
+  },
+  "generator": {
+   "type": "object",
+   "required": ["package", "version", "machine_hash"],
+   "properties": {
+    "package": {"const": "mrm"},
+    "version": {"type": "string"},
+    "machine_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+   },
+   "additionalProperties": false
+  }
+ },
+ "additionalProperties": false
+}

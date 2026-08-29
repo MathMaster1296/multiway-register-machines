@@ -1,0 +1,426 @@
+{
+ "schema": "mrm/machine/1",
+ "name": "Polynomial 2x^y + x (from the paper)",
+ "description": "The paper's polynomial machine built from power, scalar, and add. From (1, (2, 2, 0, 0, 3)) it halts with 2*2^3 + 2 = 18 in register 1.",
+ "n_registers": 5,
+ "rules": [
+  {
+   "id": "i1s1",
+   "pc_from": 1,
+   "guard": [
+    {
+     "reg": 5,
+     "op": ">",
+     "value": 0
+    }
+   ],
+   "updates": [
+    {
+     "reg": 5,
+     "delta": -1
+    }
+   ],
+   "pc_to": 2
+  },
+  {
+   "id": "i1f1",
+   "pc_from": 1,
+   "guard": [
+    {
+     "reg": 5,
+     "op": "==",
+     "value": 0
+    }
+   ],
+   "updates": [],
+   "pc_to": 10
+  },
+  {
+   "id": "i2s1",
+   "pc_from": 2,
+   "guard": [
+    {
+     "reg": 1,
+     "op": ">",
+     "value": 0
+    }
+   ],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": -1
+    }
+   ],
+   "pc_to": 3
+  },
+  {
+   "id": "i2f1",
+   "pc_from": 2,
+   "guard": [
+    {
+     "reg": 1,
+     "op": "==",
+     "value": 0
+    }
+   ],
+   "updates": [],
+   "pc_to": 8
+  },
+  {
+   "id": "i3s1",
+   "pc_from": 3,
+   "guard": [
+    {
+     "reg": 2,
+     "op": ">",
+     "value": 0
+    }
+   ],
+   "updates": [
+    {
+     "reg": 2,
+     "delta": -1
+    }
+   ],
+   "pc_to": 4
+  },
+  {
+   "id": "i3f1",
+   "pc_from": 3,
+   "guard": [
+    {
+     "reg": 2,
+     "op": "==",
+     "value": 0
+    }
+   ],
+   "updates": [],
+   "pc_to": 6
+  },
+  {
+   "id": "i4s1",
+   "pc_from": 4,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 3,
+     "delta": 1
+    }
+   ],
+   "pc_to": 5
+  },
+  {
+   "id": "i5s1",
+   "pc_from": 5,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 4,
+     "delta": 1
+    }
+   ],
+   "pc_to": 3
+  },
+  {
+   "id": "i6s1",
+   "pc_from": 6,
+   "guard": [
+    {
+     "reg": 3,
+     "op": ">",
+     "value": 0
+    }
+   ],
+   "updates": [
+    {
+     "reg": 3,
+     "delta": -1
+    }
+   ],
+   "pc_to": 7
+  },
+  {
+   "id": "i6f1",
+   "pc_from": 6,
+   "guard": [
+    {
+     "reg": 3,
+     "op": "==",
+     "value": 0
+    }
+   ],
+   "updates": [],
+   "pc_to": 2
+  },
+  {
+   "id": "i7s1",
+   "pc_from": 7,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 2,
+     "delta": 1
+    }
+   ],
+   "pc_to": 6
+  },
+  {
+   "id": "i8s1",
+   "pc_from": 8,
+   "guard": [
+    {
+     "reg": 4,
+     "op": ">",
+     "value": 0
+    }
+   ],
+   "updates": [
+    {
+     "reg": 4,
+     "delta": -1
+    }
+   ],
+   "pc_to": 9
+  },
+  {
+   "id": "i8f1",
+   "pc_from": 8,
+   "guard": [
+    {
+     "reg": 4,
+     "op": "==",
+     "value": 0
+    }
+   ],
+   "updates": [],
+   "pc_to": 1
+  },
+  {
+   "id": "i9s1",
+   "pc_from": 9,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": 1
+    }
+   ],
+   "pc_to": 8
+  },
+  {
+   "id": "i10s1",
+   "pc_from": 10,
+   "guard": [
+    {
+     "reg": 4,
+     "op": ">",
+     "value": 0
+    }
+   ],
+   "updates": [
+    {
+     "reg": 4,
+     "delta": -1
+    }
+   ],
+   "pc_to": 11
+  },
+  {
+   "id": "i10f1",
+   "pc_from": 10,
+   "guard": [
+    {
+     "reg": 4,
+     "op": "==",
+     "value": 0
+    }
+   ],
+   "updates": [],
+   "pc_to": 13
+  },
+  {
+   "id": "i11s1",
+   "pc_from": 11,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": 1
+    }
+   ],
+   "pc_to": 12
+  },
+  {
+   "id": "i12s1",
+   "pc_from": 12,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": 1
+    }
+   ],
+   "pc_to": 10
+  },
+  {
+   "id": "i13s1",
+   "pc_from": 13,
+   "guard": [
+    {
+     "reg": 2,
+     "op": ">",
+     "value": 0
+    }
+   ],
+   "updates": [
+    {
+     "reg": 2,
+     "delta": -1
+    }
+   ],
+   "pc_to": 14
+  },
+  {
+   "id": "i14s1",
+   "pc_from": 14,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": 1
+    }
+   ],
+   "pc_to": 13
+  }
+ ],
+ "halt_pcs": [],
+ "instructions": [
+  [
+   5,
+   1,
+   [
+    2
+   ],
+   [
+    10
+   ]
+  ],
+  [
+   1,
+   1,
+   [
+    3
+   ],
+   [
+    8
+   ]
+  ],
+  [
+   2,
+   1,
+   [
+    4
+   ],
+   [
+    6
+   ]
+  ],
+  [
+   3,
+   0,
+   [
+    5
+   ]
+  ],
+  [
+   4,
+   0,
+   [
+    3
+   ]
+  ],
+  [
+   3,
+   1,
+   [
+    7
+   ],
+   [
+    2
+   ]
+  ],
+  [
+   2,
+   0,
+   [
+    6
+   ]
+  ],
+  [
+   4,
+   1,
+   [
+    9
+   ],
+   [
+    1
+   ]
+  ],
+  [
+   1,
+   0,
+   [
+    8
+   ]
+  ],
+  [
+   4,
+   1,
+   [
+    11
+   ],
+   [
+    13
+   ]
+  ],
+  [
+   1,
+   0,
+   [
+    12
+   ]
+  ],
+  [
+   1,
+   0,
+   [
+    10
+   ]
+  ],
+  [
+   2,
+   1,
+   [
+    14
+   ],
+   []
+  ],
+  [
+   1,
+   0,
+   [
+    13
+   ]
+  ]
+ ],
+ "initial": [
+  1,
+  [
+   2,
+   2,
+   0,
+   0,
+   3
+  ]
+ ]
+}

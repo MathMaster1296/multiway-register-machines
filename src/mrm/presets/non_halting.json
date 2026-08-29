@@ -1,0 +1,200 @@
+{
+ "schema": "mrm/machine/1",
+ "name": "Non-halting machine",
+ "description": "One changed fail branch turns the halting machine into one that runs forever.",
+ "n_registers": 2,
+ "rules": [
+  {
+   "id": "i1s1",
+   "pc_from": 1,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": 1
+    }
+   ],
+   "pc_to": 2
+  },
+  {
+   "id": "i1s2",
+   "pc_from": 1,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": 1
+    }
+   ],
+   "pc_to": 3
+  },
+  {
+   "id": "i2s1",
+   "pc_from": 2,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": 1
+    }
+   ],
+   "pc_to": 4
+  },
+  {
+   "id": "i2s2",
+   "pc_from": 2,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": 1
+    }
+   ],
+   "pc_to": 5
+  },
+  {
+   "id": "i3s1",
+   "pc_from": 3,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 2,
+     "delta": 1
+    }
+   ],
+   "pc_to": 4
+  },
+  {
+   "id": "i4s1",
+   "pc_from": 4,
+   "guard": [
+    {
+     "reg": 1,
+     "op": ">",
+     "value": 0
+    }
+   ],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": -1
+    }
+   ],
+   "pc_to": 5
+  },
+  {
+   "id": "i4f1",
+   "pc_from": 4,
+   "guard": [
+    {
+     "reg": 1,
+     "op": "==",
+     "value": 0
+    }
+   ],
+   "updates": [],
+   "pc_to": 1
+  },
+  {
+   "id": "i5s1",
+   "pc_from": 5,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 2,
+     "delta": 1
+    }
+   ],
+   "pc_to": 3
+  },
+  {
+   "id": "i5s2",
+   "pc_from": 5,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 2,
+     "delta": 1
+    }
+   ],
+   "pc_to": 6
+  },
+  {
+   "id": "i6s1",
+   "pc_from": 6,
+   "guard": [
+    {
+     "reg": 2,
+     "op": ">",
+     "value": 0
+    }
+   ],
+   "updates": [
+    {
+     "reg": 2,
+     "delta": -1
+    }
+   ],
+   "pc_to": 1
+  }
+ ],
+ "halt_pcs": [],
+ "instructions": [
+  [
+   1,
+   0,
+   [
+    2,
+    3
+   ]
+  ],
+  [
+   1,
+   0,
+   [
+    4,
+    5
+   ]
+  ],
+  [
+   2,
+   0,
+   [
+    4
+   ]
+  ],
+  [
+   1,
+   1,
+   [
+    5
+   ],
+   [
+    1
+   ]
+  ],
+  [
+   2,
+   0,
+   [
+    3,
+    6
+   ]
+  ],
+  [
+   2,
+   1,
+   [
+    1
+   ],
+   []
+  ]
+ ],
+ "initial": [
+  1,
+  [
+   0,
+   0
+  ]
+ ]
+}

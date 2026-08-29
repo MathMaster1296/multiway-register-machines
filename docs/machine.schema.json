@@ -1,0 +1,78 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://github.com/MathMaster1296/multiway-register-machines/docs/machine.schema.json",
+ "title": "mrm/machine/1",
+ "description": "A multiway register machine, optionally with a name, description, and initial configuration. Rules are authoritative; instructions, when present, are the WFR-style program the rules were compiled from.",
+ "type": "object",
+ "required": ["schema", "n_registers", "rules"],
+ "properties": {
+  "schema": {"const": "mrm/machine/1"},
+  "name": {"type": "string"},
+  "description": {"type": "string"},
+  "n_registers": {"type": "integer", "minimum": 1},
+  "rules": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": ["id", "pc_from", "guard", "updates", "pc_to"],
+    "properties": {
+     "id": {"type": "string", "minLength": 1},
+     "pc_from": {"type": "integer", "minimum": 1},
+     "guard": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "required": ["reg", "op", "value"],
+       "properties": {
+        "reg": {"type": "integer", "minimum": 1},
+        "op": {"enum": [">", ">=", "==", "<", "%=="]},
+        "value": {"type": "integer"},
+        "modulus": {"type": "integer", "minimum": 1}
+       },
+       "additionalProperties": false
+      }
+     },
+     "updates": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "required": ["reg", "delta"],
+       "properties": {
+        "reg": {"type": "integer", "minimum": 1},
+        "delta": {"type": "integer"}
+       },
+       "additionalProperties": false
+      }
+     },
+     "pc_to": {"type": "integer", "minimum": 1}
+    },
+    "additionalProperties": false
+   }
+  },
+  "halt_pcs": {"type": "array", "items": {"type": "integer", "minimum": 1}},
+  "instructions": {
+   "type": "array",
+   "items": {
+    "type": "array",
+    "prefixItems": [
+     {"type": "integer", "minimum": 1},
+     {"enum": [0, 1]},
+     {"type": "array", "items": {"type": "integer", "minimum": 1}},
+     {"type": "array", "items": {"type": "integer", "minimum": 1}}
+    ],
+    "minItems": 3,
+    "maxItems": 4
+   }
+  },
+  "initial": {
+   "type": "array",
+   "prefixItems": [
+    {"type": "integer", "minimum": 1},
+    {"type": "array", "items": {"type": "integer", "minimum": 0}}
+   ],
+   "minItems": 2,
+   "maxItems": 2
+  }
+ },
+ "additionalProperties": false
+}

@@ -1,0 +1,152 @@
+{
+ "schema": "mrm/machine/1",
+ "name": "Collatz tree (reverse)",
+ "description": "Grow the Collatz tree upward from 1: double any value, and undo 3n + 1 when the value is 4 mod 6 and above 4. Value states are the configurations at pc 1 with the scratch register empty.",
+ "n_registers": 2,
+ "rules": [
+  {
+   "id": "double",
+   "pc_from": 1,
+   "guard": [],
+   "updates": [],
+   "pc_to": 2
+  },
+  {
+   "id": "undo3n1",
+   "pc_from": 1,
+   "guard": [
+    {
+     "reg": 1,
+     "op": "%==",
+     "value": 4,
+     "modulus": 6
+    },
+    {
+     "reg": 1,
+     "op": ">",
+     "value": 4
+    }
+   ],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": -1
+    }
+   ],
+   "pc_to": 4
+  },
+  {
+   "id": "dbl.loop",
+   "pc_from": 2,
+   "guard": [
+    {
+     "reg": 1,
+     "op": ">",
+     "value": 0
+    }
+   ],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": -1
+    },
+    {
+     "reg": 2,
+     "delta": 2
+    }
+   ],
+   "pc_to": 2
+  },
+  {
+   "id": "dbl.done",
+   "pc_from": 2,
+   "guard": [
+    {
+     "reg": 1,
+     "op": "==",
+     "value": 0
+    }
+   ],
+   "updates": [],
+   "pc_to": 3
+  },
+  {
+   "id": "copy.loop",
+   "pc_from": 3,
+   "guard": [
+    {
+     "reg": 2,
+     "op": ">",
+     "value": 0
+    }
+   ],
+   "updates": [
+    {
+     "reg": 2,
+     "delta": -1
+    },
+    {
+     "reg": 1,
+     "delta": 1
+    }
+   ],
+   "pc_to": 3
+  },
+  {
+   "id": "copy.done",
+   "pc_from": 3,
+   "guard": [
+    {
+     "reg": 2,
+     "op": "==",
+     "value": 0
+    }
+   ],
+   "updates": [],
+   "pc_to": 1
+  },
+  {
+   "id": "third.loop",
+   "pc_from": 4,
+   "guard": [
+    {
+     "reg": 1,
+     "op": ">=",
+     "value": 3
+    }
+   ],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": -3
+    },
+    {
+     "reg": 2,
+     "delta": 1
+    }
+   ],
+   "pc_to": 4
+  },
+  {
+   "id": "third.done",
+   "pc_from": 4,
+   "guard": [
+    {
+     "reg": 1,
+     "op": "==",
+     "value": 0
+    }
+   ],
+   "updates": [],
+   "pc_to": 3
+  }
+ ],
+ "halt_pcs": [],
+ "initial": [
+  1,
+  [
+   1,
+   0
+  ]
+ ]
+}

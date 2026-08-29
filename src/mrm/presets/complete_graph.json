@@ -1,0 +1,114 @@
+{
+ "schema": "mrm/machine/1",
+ "name": "Complete graph",
+ "description": "Three increment instructions wired so the control graph is the complete graph on three program counters.",
+ "n_registers": 2,
+ "rules": [
+  {
+   "id": "i1s1",
+   "pc_from": 1,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": 1
+    }
+   ],
+   "pc_to": 2
+  },
+  {
+   "id": "i1s2",
+   "pc_from": 1,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": 1
+    }
+   ],
+   "pc_to": 3
+  },
+  {
+   "id": "i2s1",
+   "pc_from": 2,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": 1
+    }
+   ],
+   "pc_to": 1
+  },
+  {
+   "id": "i2s2",
+   "pc_from": 2,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": 1
+    }
+   ],
+   "pc_to": 3
+  },
+  {
+   "id": "i3s1",
+   "pc_from": 3,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": 1
+    }
+   ],
+   "pc_to": 1
+  },
+  {
+   "id": "i3s2",
+   "pc_from": 3,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": 1
+    }
+   ],
+   "pc_to": 2
+  }
+ ],
+ "halt_pcs": [],
+ "instructions": [
+  [
+   1,
+   0,
+   [
+    2,
+    3
+   ]
+  ],
+  [
+   1,
+   0,
+   [
+    1,
+    3
+   ]
+  ],
+  [
+   1,
+   0,
+   [
+    1,
+    2
+   ]
+  ]
+ ],
+ "initial": [
+  1,
+  [
+   0,
+   0
+  ]
+ ]
+}

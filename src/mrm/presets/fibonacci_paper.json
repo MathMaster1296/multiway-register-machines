@@ -1,0 +1,279 @@
+{
+ "schema": "mrm/machine/1",
+ "name": "Fibonacci (from the paper)",
+ "description": "The paper's Fibonacci machine: repeated additions produce successive Fibonacci numbers in register 1 at the odometer states (pc 1 with registers 3 and 4 empty).",
+ "n_registers": 4,
+ "rules": [
+  {
+   "id": "i1s1",
+   "pc_from": 1,
+   "guard": [
+    {
+     "reg": 2,
+     "op": ">",
+     "value": 0
+    }
+   ],
+   "updates": [
+    {
+     "reg": 2,
+     "delta": -1
+    }
+   ],
+   "pc_to": 2
+  },
+  {
+   "id": "i1f1",
+   "pc_from": 1,
+   "guard": [
+    {
+     "reg": 2,
+     "op": "==",
+     "value": 0
+    }
+   ],
+   "updates": [],
+   "pc_to": 4
+  },
+  {
+   "id": "i2s1",
+   "pc_from": 2,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 3,
+     "delta": 1
+    }
+   ],
+   "pc_to": 3
+  },
+  {
+   "id": "i3s1",
+   "pc_from": 3,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 4,
+     "delta": 1
+    }
+   ],
+   "pc_to": 1
+  },
+  {
+   "id": "i4s1",
+   "pc_from": 4,
+   "guard": [
+    {
+     "reg": 1,
+     "op": ">",
+     "value": 0
+    }
+   ],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": -1
+    }
+   ],
+   "pc_to": 5
+  },
+  {
+   "id": "i4f1",
+   "pc_from": 4,
+   "guard": [
+    {
+     "reg": 1,
+     "op": "==",
+     "value": 0
+    }
+   ],
+   "updates": [],
+   "pc_to": 6
+  },
+  {
+   "id": "i5s1",
+   "pc_from": 5,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 3,
+     "delta": 1
+    }
+   ],
+   "pc_to": 4
+  },
+  {
+   "id": "i6s1",
+   "pc_from": 6,
+   "guard": [
+    {
+     "reg": 3,
+     "op": ">",
+     "value": 0
+    }
+   ],
+   "updates": [
+    {
+     "reg": 3,
+     "delta": -1
+    }
+   ],
+   "pc_to": 7
+  },
+  {
+   "id": "i6f1",
+   "pc_from": 6,
+   "guard": [
+    {
+     "reg": 3,
+     "op": "==",
+     "value": 0
+    }
+   ],
+   "updates": [],
+   "pc_to": 8
+  },
+  {
+   "id": "i7s1",
+   "pc_from": 7,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 2,
+     "delta": 1
+    }
+   ],
+   "pc_to": 6
+  },
+  {
+   "id": "i8s1",
+   "pc_from": 8,
+   "guard": [
+    {
+     "reg": 4,
+     "op": ">",
+     "value": 0
+    }
+   ],
+   "updates": [
+    {
+     "reg": 4,
+     "delta": -1
+    }
+   ],
+   "pc_to": 9
+  },
+  {
+   "id": "i8f1",
+   "pc_from": 8,
+   "guard": [
+    {
+     "reg": 4,
+     "op": "==",
+     "value": 0
+    }
+   ],
+   "updates": [],
+   "pc_to": 1
+  },
+  {
+   "id": "i9s1",
+   "pc_from": 9,
+   "guard": [],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": 1
+    }
+   ],
+   "pc_to": 8
+  }
+ ],
+ "halt_pcs": [],
+ "instructions": [
+  [
+   2,
+   1,
+   [
+    2
+   ],
+   [
+    4
+   ]
+  ],
+  [
+   3,
+   0,
+   [
+    3
+   ]
+  ],
+  [
+   4,
+   0,
+   [
+    1
+   ]
+  ],
+  [
+   1,
+   1,
+   [
+    5
+   ],
+   [
+    6
+   ]
+  ],
+  [
+   3,
+   0,
+   [
+    4
+   ]
+  ],
+  [
+   3,
+   1,
+   [
+    7
+   ],
+   [
+    8
+   ]
+  ],
+  [
+   2,
+   0,
+   [
+    6
+   ]
+  ],
+  [
+   4,
+   1,
+   [
+    9
+   ],
+   [
+    1
+   ]
+  ],
+  [
+   1,
+   0,
+   [
+    8
+   ]
+  ]
+ ],
+ "initial": [
+  1,
+  [
+   1,
+   1,
+   0,
+   0
+  ]
+ ]
+}

@@ -1,0 +1,52 @@
+{
+ "schema": "mrm/machine/1",
+ "name": "Custom",
+ "description": "An editable copy of the grid-paths rule table. Change anything.",
+ "n_registers": 2,
+ "rules": [
+  {
+   "id": "right",
+   "pc_from": 1,
+   "guard": [
+    {
+     "reg": 1,
+     "op": "<",
+     "value": 3
+    }
+   ],
+   "updates": [
+    {
+     "reg": 1,
+     "delta": 1
+    }
+   ],
+   "pc_to": 1
+  },
+  {
+   "id": "up",
+   "pc_from": 1,
+   "guard": [
+    {
+     "reg": 2,
+     "op": "<",
+     "value": 3
+    }
+   ],
+   "updates": [
+    {
+     "reg": 2,
+     "delta": 1
+    }
+   ],
+   "pc_to": 1
+  }
+ ],
+ "halt_pcs": [],
+ "initial": [
+  1,
+  [
+   0,
+   0
+  ]
+ ]
+}
