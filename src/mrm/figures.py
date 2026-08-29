@@ -31,7 +31,7 @@ def _svg_document(width: float, height: float, body: list[str]) -> str:
     defs = (
         '<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" '
         'markerWidth="7" markerHeight="7" orient="auto-start-reverse">'
-        '<path d="M 0 0 L 10 5 L 0 10 z" fill="#555"/></marker></defs>'
+        '<path d="M 0 0 L 10 5 L 0 10 z" fill="#8f8e88"/></marker></defs>'
     )
     background = f'<rect width="{width:.0f}" height="{height:.0f}" fill="white"/>'
     return "\n".join([head, defs, background, *body, "</svg>"]) + "\n"
@@ -47,9 +47,11 @@ def evolution_svg(
     positions = layered_layout(ev, x_gap=1.35, y_gap=1.0)
     xs = [p[0] for p in positions.values()] or [0.0]
     ys = [p[1] for p in positions.values()] or [0.0]
-    dx = MARGIN - min(xs) * SCALE
-    dy = MARGIN + (30 if caption else 0) - min(ys) * SCALE
     width = (max(xs) - min(xs)) * SCALE + 2 * MARGIN
+    if caption:
+        width = max(width, len(caption) * 7.5 + 2 * MARGIN)
+    dx = width / 2 - ((max(xs) + min(xs)) / 2) * SCALE
+    dy = MARGIN + (30 if caption else 0) - min(ys) * SCALE
     height = (max(ys) - min(ys)) * SCALE + 2 * MARGIN + (30 if caption else 0)
 
     def at(node: int) -> tuple[float, float]:
@@ -66,15 +68,15 @@ def evolution_svg(
         (x1, y1), (x2, y2) = at(edge.src), at(edge.dst)
         body.append(
             f'<line x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" '
-            'stroke="#555" stroke-width="1.2" marker-end="url(#arrow)"/>'
+            'stroke="#8f8e88" stroke-width="1.2" marker-end="url(#arrow)"/>'
         )
     for node, config in ev.nodes.items():
         x, y = at(node)
         terminal = node in ev.terminals
-        fill = "#fde9c8" if terminal else "#dbe9f8"
+        fill, stroke = ("#fcecc8", "#b97f00") if terminal else ("#cde2fb", "#2a78d6")
         body.append(
             f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{NODE_RADIUS:.0f}" '
-            f'fill="{fill}" stroke="#333" stroke-width="1"/>'
+            f'fill="{fill}" stroke="{stroke}" stroke-width="1.2"/>'
         )
         text = node_text(node) if node_text else str(config.registers[0])
         body.append(
@@ -89,7 +91,7 @@ def growth_svg(series: list[tuple[str, list[int]]], caption: str) -> str:
     width, height, pad = 560.0, 320.0, 48.0
     top = max((max(s) for _, s in series if s), default=1)
     steps = max((len(s) for _, s in series), default=1)
-    colors = ["#2c6fbb", "#c25b1e", "#3a7d44", "#7b4ba0"]
+    colors = ["#2a78d6", "#eb6834", "#1baf7a", "#4a3aa7"]
 
     def x_at(i: int) -> float:
         return pad + i * (width - 2 * pad) / max(steps - 1, 1)

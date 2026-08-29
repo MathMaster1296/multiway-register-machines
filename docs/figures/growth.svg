@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="560" height="320" viewBox="0 0 560 320" font-family="Helvetica, Arial, sans-serif">
-<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#555"/></marker></defs>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8f8e88"/></marker></defs>
 <rect width="560" height="320" fill="white"/>
 <text x="280.0" y="24" text-anchor="middle" font-size="15" fill="#222">Fibonacci k = 16: tree frontier vs merged states per step</text>
 <line x1="48.0" y1="272.0" x2="512.0" y2="272.0" stroke="#333"/>
@@ -7,8 +7,8 @@
 <text x="40.0" y="52.0" text-anchor="end" font-size="11" fill="#333">512</text>
 <text x="40.0" y="276.0" text-anchor="end" font-size="11" fill="#333">0</text>
 <text x="512.0" y="292.0" text-anchor="end" font-size="11" fill="#333">step 14</text>
-<polyline points="48.0,271.6 81.1,271.1 114.3,270.2 147.4,268.5 180.6,265.0 213.7,258.0 246.9,244.0 280.0,216.0 313.1,160.9 346.3,80.4 379.4,48.0 412.6,118.0 445.7,213.4 478.9,260.6 512.0,271.1" fill="none" stroke="#2c6fbb" stroke-width="2"/>
-<text x="518.0" y="275.1" font-size="12" fill="#2c6fbb">tree</text>
-<polyline points="48.0,271.6 81.1,271.1 114.3,271.1 147.4,271.1 180.6,271.1 213.7,271.1 246.9,271.1 280.0,271.1 313.1,271.6" fill="none" stroke="#c25b1e" stroke-width="2"/>
-<text x="319.1" y="275.6" font-size="12" fill="#c25b1e">states</text>
+<polyline points="48.0,271.6 81.1,271.1 114.3,270.2 147.4,268.5 180.6,265.0 213.7,258.0 246.9,244.0 280.0,216.0 313.1,160.9 346.3,80.4 379.4,48.0 412.6,118.0 445.7,213.4 478.9,260.6 512.0,271.1" fill="none" stroke="#2a78d6" stroke-width="2"/>
+<text x="518.0" y="275.1" font-size="12" fill="#2a78d6">tree</text>
+<polyline points="48.0,271.6 81.1,271.1 114.3,271.1 147.4,271.1 180.6,271.1 213.7,271.1 246.9,271.1 280.0,271.1 313.1,271.6" fill="none" stroke="#eb6834" stroke-width="2"/>
+<text x="319.1" y="275.6" font-size="12" fill="#eb6834">states</text>
 </svg>
