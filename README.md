@@ -141,15 +141,6 @@ To work on it locally: `npm install && npm run build` inside `web/`, build a
 wheel with `python -m build`, then `python scripts/build_site.py` and serve
 `web/dist` with any static file server.
 
-## More from me
-
-- [Geode](https://mathmaster1296.github.io/geode/): solving polynomials with
-  polygons, an interactive companion to the hyper-Catalan series papers
-- [MindMasters Academy](https://mathmaster1296.github.io/mindmasters/): math
-  and chess training for K-8 competition students, in one offline HTML file
-- [DyslexAid](https://github.com/MathMaster1296/dyslexaid): a Chrome extension
-  that makes any web page easier to read
-
 ## License
 
 MIT. See [LICENSE](LICENSE).
