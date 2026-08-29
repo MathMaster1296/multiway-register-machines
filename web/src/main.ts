@@ -317,7 +317,8 @@ function emptyDoc(): MachineDoc {
 }
 
 async function fetchJson(path: string): Promise<unknown> {
-  const response = await fetch(path);
+  // no-cache still allows 304 revalidation; it only forbids silent staleness.
+  const response = await fetch(path, { cache: "no-cache" });
   if (!response.ok) throw new Error(`${path}: HTTP ${response.status}`);
   return response.json();
 }

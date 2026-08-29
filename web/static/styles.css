@@ -418,3 +418,13 @@ button.quiet:hover { background: var(--accent-softer); border-color: var(--accen
 
 /* The hidden attribute must always win, whatever display a class sets. */
 [hidden] { display: none !important; }
+
+/* ---- site footer ---- */
+
+.sitefooter {
+  padding: 0 20px 14px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+}
+.sitefooter p { margin: 0; }

@@ -6,6 +6,7 @@ preset machine files, and the wheel, and writes the manifest files the page
 fetches at startup. Usage: python scripts/build_site.py [OUT_DIR]
 """
 
+import hashlib
 import json
 import shutil
 import sys
@@ -28,9 +29,25 @@ def main() -> None:
     if out.exists():
         shutil.rmtree(out)
     out.mkdir(parents=True)
-    shutil.copy2(WEB / "index.html", out / "index.html")
+
+    # Cache busting without a bundler: every build's modules live in a
+    # content-hashed directory, so a new page version can never mix with
+    # stale cached modules; relative imports keep working inside it.
+    digest = hashlib.sha256()
+    for path in sorted((WEB / "js").glob("*.js")):
+        digest.update(path.name.encode())
+        digest.update(path.read_bytes())
+    digest.update((WEB / "static" / "styles.css").read_bytes())
+    stamp = digest.hexdigest()[:10]
+
+    html = (WEB / "index.html").read_text()
+    html = html.replace('src="js/main.js"', f'src="js-{stamp}/main.js"')
+    html = html.replace(
+        'href="static/styles.css"', f'href="static/styles.css?v={stamp}"'
+    )
+    (out / "index.html").write_text(html)
     shutil.copytree(WEB / "static", out / "static")
-    shutil.copytree(WEB / "js", out / "js")
+    shutil.copytree(WEB / "js", out / f"js-{stamp}")
 
     presets_out = out / "public" / "presets"
     presets_out.mkdir(parents=True)

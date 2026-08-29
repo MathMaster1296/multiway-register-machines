@@ -29,7 +29,7 @@ export class EngineClient {
 
   start(): void {
     this.ready = false;
-    const worker = new Worker("js/worker.js", { type: "module" });
+    const worker = new Worker(new URL("./worker.js", import.meta.url), { type: "module" });
     this.worker = worker;
     worker.onmessage = (event: MessageEvent<WorkerResponse>) => {
       const message = event.data;
