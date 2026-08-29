@@ -27,6 +27,9 @@ dependencies = []
 [project.urls]
 Repository = "https://github.com/MathMaster1296/multiway-register-machines"
 
+[project.scripts]
+mrm = "mrm.cli:main"
+
 [project.optional-dependencies]
 dev = [
     "pytest>=8",
