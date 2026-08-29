@@ -68,14 +68,29 @@ the original leaves behavior implicit, the decision is recorded here.
     `N[GeometricMean[...]]` on all published values to full double precision;
     golden tests compare within 1e-12.
 
-## Open items
+## Resolved in the analysis phase
 
-* The research notebook's `collatzSimulate` extends `MRMStep` with a parity
-  test outside the instruction format (at one pc it branches on whether a
-  register is odd). The general rule model expresses this with `%==` guards;
-  the Collatz preset will be built that way in Phase 2 and checked against
-  the notebook's `collatzSequence` behavior.
-* `RulePlot`, `CirclePlot`, and `ProbabilityPlot` are visualizations, not
-  semantics; they map to the web explorer and `layout.py` in later phases.
-  The probability tables (`MRMProbList`) are a pure function of the tree-mode
-  frontiers and will be ported with the statistics pane.
+11. **The `collatzSimulate` parity oracle became guard rules.** The notebook
+    extends `MRMStep` with a special case at one pc (branch on parity of a
+    register). The port expresses it as two `%==`-guarded rules in
+    `builders.collatz_forward_machine`, so the deterministic Collatz model is
+    an ordinary machine with no meta-step. `collatzSequence[101]` is
+    reproduced value for value.
+
+12. **`MRMProbList` is ported as `probability_table`,** returning exact
+    rationals where the WFR numericizes; the notebook's recorded output for
+    `simpleMRM` at depth 6 is matched exactly. `RulePlot` and `CirclePlot`
+    are pure renderings and belong to the web explorer.
+
+13. **The reverse Collatz preset works at the value level through loops.**
+    Single-step updates are additive by design, so doubling and dividing run
+    as short loops (a few machine steps per value step), with the odometer
+    at pc 1 with an empty scratch register. The invariant suite checks the
+    value map exactly to depth 14 and cross-checks the machine's odometer
+    set against the value-level closure.
+
+14. **The spec's invariant models are additions, not replacements.** Grid
+    paths, recursion Fibonacci, and reverse Collatz do not appear in the
+    notebook; they ship alongside the paper's own machines because their
+    closed-form invariants (binomials, Fibonacci path counts, Collatz
+    return) give the test suite independent ground truth.
