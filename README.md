@@ -1,11 +1,16 @@
 # Multiway Register Machines
 
 An open-source, Mathematica-free implementation of multiway register machine
-evolution, with exact analysis tools and reproducible figures. Companion code
-for the paper "State Evolution in Multiway Register Machines Featuring
-Applications to Recursive Functions" and the Wolfram Function Repository
-resource
+evolution, with a browser explorer, exact analysis tools, and reproducible
+figures. Companion code for the paper "State Evolution in Multiway Register
+Machines Featuring Applications to Recursive Functions" and the Wolfram
+Function Repository resource
 [MultiwayRegisterMachine](https://resources.wolframcloud.com/FunctionRepository/resources/MultiwayRegisterMachine/).
+
+**Live explorer:**
+[mathmaster1296.github.io/multiway-register-machines](https://mathmaster1296.github.io/multiway-register-machines/)
+
+![The Fibonacci states graph with path counts](docs/figures/fibonacci-dag.svg)
 
 ## What a multiway register machine is
 
@@ -84,7 +89,8 @@ mrm figure all --out figures       # regenerate every figure, byte-identical
 ```
 
 The core package needs Python 3.10+ and nothing else: no NumPy, no graph
-library, no Mathematica.
+library, no Mathematica. The formal model, written for a referee, is in
+[docs/semantics.md](docs/semantics.md).
 
 ## Beyond the original
 
@@ -116,9 +122,25 @@ code. Evolutions serialize with their parameters, derived data, and a hash
 of the machine that produced them
 ([docs/evolution.schema.json](docs/evolution.schema.json)).
 
-A browser-based explorer that runs this same engine through Pyodide is in
-progress; the point of that design is that the site and the paper cannot
-disagree.
+## The explorer
+
+The site under `web/` is static and framework-free. It does not reimplement
+any mathematics in JavaScript: a Web Worker loads Pyodide, installs the same
+`mrm` wheel that CI builds, and every run on the page goes through the exact
+code in this repository, so the site and the paper cannot disagree. The
+first visit downloads the Python runtime (a few megabytes, cached
+afterwards); everything after that is local and works offline.
+
+The page keeps the full machine and every evolution setting in the URL,
+compressed, so any view can be cited by link and reproduced exactly. Step
+playback reveals the evolution layer by layer, branch highlighting shows a
+state's ancestors and descendants, and the current view exports as SVG, PNG,
+or evolution JSON. Graphs under 2000 nodes render as interactive SVG and
+larger ones fall back to a canvas.
+
+To work on it locally: `npm install && npm run build` inside `web/`, build a
+wheel with `python -m build`, then `python scripts/build_site.py` and serve
+`web/dist` with any static file server.
 
 ## License
 

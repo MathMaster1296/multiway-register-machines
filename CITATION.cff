@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Multiway Register Machines"
+type: software
+authors:
+  - family-names: Mukewar
+    given-names: Pratham
+repository-code: "https://github.com/MathMaster1296/multiway-register-machines"
+url: "https://mathmaster1296.github.io/multiway-register-machines/"
+license: MIT
+version: 0.1.0
+date-released: "2026-08-29"
+# doi: fill in after archiving a release (for example through Zenodo)
