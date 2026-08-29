@@ -21,3 +21,4 @@ htmlcov/
 web/node_modules/
 web/dist/
 reference/
+web/js/
