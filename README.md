@@ -47,18 +47,18 @@ its Python equivalent.
 Three models carry closed-form invariants that `mrm verify` checks against
 the engine's own output:
 
-* Grid paths: walk from (0, 0) to (m, n) by unit steps. The path count to
-  the terminal must be binomial(m + n, m); the suite checks all m, n up
-  to 8.
-* Fibonacci recursion: k branches to k - 1 and k - 2 with base cases at 1
-  and 2. The path count to the base cases must be F(k), checked for k up
-  to 20.
-* Collatz, in three flavors: the paper's multiway machine, which explores
-  both the 3n + 1 and the halving section at every branch point; a
-  deterministic variant whose parity test is expressed as modular guard
-  rules; and a reverse machine that grows the Collatz tree upward from 1.
-  The suite checks trajectories against the arithmetic map and the reverse
-  tree against forward return.
+* Grid paths walks from (0, 0) to (m, n) by unit steps right or up. The
+  path count to the terminal must equal binomial(m + n, m), and the suite
+  checks every m and n up to 8.
+* Fibonacci recursion sends k to both k - 1 and k - 2, with base cases at
+  1 and 2. The path count to the base cases must equal F(k), checked up to
+  k = 20.
+* Collatz comes in three flavors: the paper's multiway machine, which
+  explores the 3n + 1 section and the halving section at every branch
+  point; a deterministic variant whose parity test is written as modular
+  guard rules; and a reverse machine that grows the Collatz tree upward
+  from 1. The suite checks trajectories against the arithmetic map and the
+  reverse tree against forward return.
 
 The paper's own machines ship as presets too: the polynomial evaluator built
 from `power`, `scalar`, and `add`, the Fibonacci adder, and the notebook's
@@ -96,24 +96,23 @@ library, no Mathematica. The formal model, written for a referee, is in
 
 Some analyses here go further than the WFR resource:
 
-* Exact absorption analysis. Treating each applicable rule as equally
-  probable turns the states graph into a Markov chain; `mrm.absorption`
-  solves it in rational arithmetic and reports the probability of halting in
-  each terminal, the probability of running forever, and the exact expected
-  number of steps. The WFR probability plots are the transient face of the
-  same chain, and `mrm.probability_table` reproduces those tables as exact
+* `mrm.absorption` treats every applicable rule as equally probable, which
+  turns the states graph into a Markov chain, then solves that chain in
+  exact rational arithmetic: the probability of halting in each terminal,
+  the probability of running forever, and the exact expected number of
+  steps. The WFR probability plots are the transient face of the same
+  chain, and `mrm.probability_table` reproduces those tables as exact
   fractions.
-* Path counting with an honest infinity. Counts respect rule multiplicity,
-  and on cyclic graphs affected nodes report an explicit infinite sentinel
-  along with a concrete cycle witness instead of a wrong number.
-* Branchial graphs and reconvergence. `mrm.branchial_graph` connects
-  same-layer states that share a parent, and `mrm.reconvergence` measures
-  how often the two sides of a branch meet again, which is the property that
-  decides whether state merging pays off.
-* Deterministic layout. Figures come from a fixed-pass layered layout with
-  no randomness, so the same evolution always renders to the same bytes.
+* Path counts respect rule multiplicity, and on cyclic graphs the affected
+  nodes report an explicit infinite sentinel together with a concrete cycle
+  witness, never a wrong number.
+* `mrm.branchial_graph` connects same-layer states that share a parent, and
+  `mrm.reconvergence` measures how often the two sides of a branch meet
+  again, which is the property that decides whether state merging pays off.
+* Figures come from a fixed-pass layered layout with no randomness, so the
+  same evolution always renders to the same bytes.
 
-## Repository layout
+## Files and formats
 
 Machines serialize to a versioned JSON format
 ([docs/machine.schema.json](docs/machine.schema.json)); presets under
