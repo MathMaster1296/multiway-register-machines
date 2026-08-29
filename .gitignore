@@ -20,3 +20,4 @@ htmlcov/
 # Web (populated in later phases)
 web/node_modules/
 web/dist/
+reference/
