@@ -2,8 +2,9 @@
 
 An open-source, Mathematica-free implementation of multiway register machine
 evolution, with a browser explorer, exact analysis tools, and reproducible
-figures. Companion code for the paper "State Evolution in Multiway Register
-Machines Featuring Applications to Recursive Functions" and the Wolfram
+figures. Companion code for my article
+["State Evolution in Multiway Register Machines Featuring Applications to
+Recursive Functions"](https://community.wolfram.com/groups/-/m/t/3499350) and the Wolfram
 Function Repository resource
 [MultiwayRegisterMachine](https://resources.wolframcloud.com/FunctionRepository/resources/MultiwayRegisterMachine/).
 

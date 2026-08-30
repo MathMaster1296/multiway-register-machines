@@ -2,7 +2,7 @@
 
 The Wolfram Function Repository resource is one function with six usage
 forms. Source was recovered from the published definition notebook (v1.0.0)
-and from the research notebook attached to the Wolfram Community post.
+and from the research notebook attached to [the Wolfram Community article](https://community.wolfram.com/groups/-/m/t/3499350).
 Golden fixtures in `tests/golden/` hold the evaluated outputs recorded in
 those notebooks; the parity tests compare against them without loosening.
 

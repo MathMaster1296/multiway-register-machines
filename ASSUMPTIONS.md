@@ -2,7 +2,7 @@
 
 The engine was ported from the published source of the Wolfram Function
 Repository resource `MultiwayRegisterMachine` (v1.0.0, definition notebook)
-and the WSRP research notebook attached to the Wolfram Community post. Where
+and the WSRP research notebook attached to [the Wolfram Community article](https://community.wolfram.com/groups/-/m/t/3499350). Where
 the recovered Wolfram code and the project specification disagree, or where
 the original leaves behavior implicit, the decision is recorded here.
 
