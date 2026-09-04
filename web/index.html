@@ -12,7 +12,7 @@
 <a class="skip-link" href="#graph-host">Skip to the graph</a>
 <header class="topbar">
   <div class="brand">
-    <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+    <svg width="34" height="34" viewBox="0 0 26 26" aria-hidden="true">
       <g fill="none" stroke="#2a78d6" stroke-width="1.8">
         <line x1="13" y1="6" x2="6" y2="19"/>
         <line x1="13" y1="6" x2="20" y2="19"/>
@@ -22,13 +22,15 @@
       <circle cx="5.5" cy="20" r="3.4" fill="#eb6834"/>
       <circle cx="20.5" cy="20" r="3.4" fill="#eda100"/>
     </svg>
-    <h1>Multiway Register Machine Explorer</h1>
+    <div class="masthead-text">
+      <h1>Multiway Register Machine Explorer</h1>
+      <p class="tagline">
+        Every graph on this page is computed by the same
+        <a href="https://github.com/MathMaster1296/multiway-register-machines">Python engine</a>
+        the paper uses, running in your browser through Pyodide.
+      </p>
+    </div>
   </div>
-  <p class="tagline">
-    Every graph on this page is computed by the same
-    <a href="https://github.com/MathMaster1296/multiway-register-machines">Python engine</a>
-    the paper uses, running in your browser through Pyodide.
-  </p>
   <nav class="top-links" aria-label="Project links">
     <a href="https://community.wolfram.com/groups/-/m/t/3499350">the article</a>
     <a href="https://resources.wolframcloud.com/FunctionRepository/resources/MultiwayRegisterMachine/">WFR original</a>
@@ -102,6 +104,7 @@
         <button id="zoom-fit" class="quiet" aria-label="Fit the whole graph">fit</button>
       </span>
     </div>
+    <ul id="rule-legend" class="legend rule-legend" aria-label="Rules by color" hidden></ul>
     <div id="graph-host" class="graph-host" tabindex="0"
          aria-label="Evolution graph. Drag to pan, scroll or use the zoom buttons to zoom.">
       <div id="engine-status" class="engine-status" role="status">Loading</div>

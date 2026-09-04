@@ -1,16 +1,20 @@
 /** The graph canvas: layered top-to-bottom rendering of an evolution.
  *
  * SVG below CANVAS_THRESHOLD nodes (interactive: pan, zoom, selection,
- * ancestor/descendant highlighting, edge labels above a zoom threshold);
- * a 2d canvas above it (pan and zoom only). The switch is automatic.
+ * ancestor/descendant highlighting, shortest-path emphasis, edge labels
+ * above a zoom threshold); a 2d canvas above it (pan and zoom only). The
+ * switch is automatic. Edges are colored by rule family, chips carry the
+ * program counter as a badge, and faint bands mark the steps.
  */
 
 import type { EvolutionJson } from "./types.js";
 
 export const CANVAS_THRESHOLD = 2000;
-const SCALE = 90;
-const CHIP_HEIGHT = 26;
-const LABEL_ZOOM = 0.7;
+const X_SCALE = 118;
+const Y_SCALE = 104;
+const CHIP_HEIGHT = 30;
+const LABEL_ZOOM = 0.62;
+const RULE_COLOR_SLOTS = 8;
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 
@@ -18,7 +22,15 @@ interface ViewData {
   evolution: EvolutionJson;
   positions: Map<number, [number, number]>;
   layerOf: Map<number, number>;
-  labels: Map<number, string>;
+  ruleSlot: Map<string, number>;
+  bounds: { minX: number; maxX: number; minY: number; maxY: number };
+}
+
+function chipWidth(pc: number, registers: number[]): { badge: number; total: number } {
+  const badge = 14 + 7.2 * String(pc).length;
+  const label = registers.join(", ");
+  const total = badge + 16 + 7.2 * label.length;
+  return { badge, total: Math.max(total, 52) };
 }
 
 export class GraphView {
@@ -53,20 +65,36 @@ export class GraphView {
     return this.canvas !== null;
   }
 
+  /** Rule id -> color slot in order of first appearance; -1 past the palette. */
+  ruleColors(): Map<string, number> {
+    return new Map(this.data?.ruleSlot ?? []);
+  }
+
   setEvolution(evolution: EvolutionJson, layout: Record<string, [number, number]>): void {
     const positions = new Map<number, [number, number]>();
     for (const [id, [x, y]] of Object.entries(layout)) {
-      positions.set(Number(id), [x * SCALE, y * SCALE]);
+      positions.set(Number(id), [x * X_SCALE, y * Y_SCALE]);
     }
     const layerOf = new Map<number, number>();
     evolution.layers.forEach((layer, index) => {
       for (const node of layer) layerOf.set(node, index);
     });
-    const labels = new Map<number, string>();
-    for (const [id, pc, registers] of evolution.nodes) {
-      labels.set(id, `${pc} | ${registers.join(",")}`);
+    const ruleSlot = new Map<string, number>();
+    for (const [, , rule] of evolution.edges) {
+      if (!ruleSlot.has(rule)) {
+        const next = ruleSlot.size;
+        ruleSlot.set(rule, next < RULE_COLOR_SLOTS ? next : -1);
+      }
     }
-    this.data = { evolution, positions, layerOf, labels };
+    const xs = [...positions.values()].map((p) => p[0]);
+    const ys = [...positions.values()].map((p) => p[1]);
+    const bounds = {
+      minX: Math.min(...xs, 0),
+      maxX: Math.max(...xs, 0),
+      minY: Math.min(...ys, 0),
+      maxY: Math.max(...ys, 0),
+    };
+    this.data = { evolution, positions, layerOf, ruleSlot, bounds };
     this.selected = null;
     this.ancestors.clear();
     this.descendants.clear();
@@ -78,25 +106,9 @@ export class GraphView {
     this.rebuild();
   }
 
-  setStep(step: number): void {
+  setStep(step: number, follow = false): void {
     this.visibleStep = step;
-    this.refresh();
-  }
-
-  /** Zoom around the center of the view; the buttons and keyboard use this. */
-  zoomBy(factor: number): void {
-    this.userMoved = true;
-    const cx = this.root.clientWidth / 2;
-    const cy = this.root.clientHeight / 2;
-    const { x, y, k } = this.transform;
-    const next = Math.min(6, Math.max(0.05, k * factor));
-    this.transform = { k: next, x: cx - ((cx - x) / k) * next, y: cy - ((cy - y) / k) * next };
-    this.refresh();
-  }
-
-  fitView(): void {
-    this.userMoved = false;
-    this.fit();
+    if (follow) this.keepStepVisible(step);
     this.refresh();
   }
 
@@ -114,7 +126,86 @@ export class GraphView {
     this.onSelect(node);
   }
 
-  /** Edge indices of one shortest path from the roots to the node. */
+  zoomBy(factor: number): void {
+    this.userMoved = true;
+    const cx = this.root.clientWidth / 2;
+    const cy = this.root.clientHeight / 2;
+    const { x, y, k } = this.transform;
+    const next = Math.min(6, Math.max(0.05, k * factor));
+    this.transform = { k: next, x: cx - ((cx - x) / k) * next, y: cy - ((cy - y) / k) * next };
+    this.refresh();
+  }
+
+  fitView(): void {
+    this.userMoved = false;
+    this.fit();
+    this.refresh();
+  }
+
+  exportSvg(): string | null {
+    if (!this.svg) return null;
+    const clone = this.svg.cloneNode(true) as SVGSVGElement;
+    clone.setAttribute("xmlns", SVG_NS);
+    clone.setAttribute("width", String(this.root.clientWidth));
+    clone.setAttribute("height", String(this.root.clientHeight));
+    const style = document.createElementNS(SVG_NS, "style");
+    style.textContent = exportStyles();
+    clone.insertBefore(style, clone.firstChild);
+    return new XMLSerializer().serializeToString(clone);
+  }
+
+  async exportPng(): Promise<Blob | null> {
+    if (this.canvas) {
+      return new Promise((resolve) => this.canvas?.toBlob(resolve, "image/png"));
+    }
+    const text = this.exportSvg();
+    if (!text) return null;
+    const image = new Image();
+    const url = URL.createObjectURL(new Blob([text], { type: "image/svg+xml" }));
+    await new Promise((resolve, reject) => {
+      image.onload = resolve;
+      image.onerror = reject;
+      image.src = url;
+    });
+    const target = document.createElement("canvas");
+    target.width = this.root.clientWidth * 2;
+    target.height = this.root.clientHeight * 2;
+    const context = target.getContext("2d");
+    if (!context) return null;
+    context.scale(2, 2);
+    context.fillStyle = "#ffffff";
+    context.fillRect(0, 0, this.root.clientWidth, this.root.clientHeight);
+    context.drawImage(image, 0, 0);
+    URL.revokeObjectURL(url);
+    return new Promise((resolve) => target.toBlob(resolve, "image/png"));
+  }
+
+  private reach(start: number, direction: "in" | "out"): Set<number> {
+    if (!this.data) return new Set();
+    const adjacency = new Map<number, number[]>();
+    for (const [src, dst] of this.data.evolution.edges) {
+      const [from, to] = direction === "out" ? [src, dst] : [dst, src];
+      const list = adjacency.get(from);
+      if (list) list.push(to);
+      else adjacency.set(from, [to]);
+    }
+    const seen = new Set<number>();
+    let frontier = [start];
+    while (frontier.length) {
+      const next: number[] = [];
+      for (const node of frontier) {
+        for (const neighbor of adjacency.get(node) ?? []) {
+          if (!seen.has(neighbor)) {
+            seen.add(neighbor);
+            next.push(neighbor);
+          }
+        }
+      }
+      frontier = next;
+    }
+    return seen;
+  }
+
   private shortestPathEdges(target: number): Set<number> {
     if (!this.data) return new Set();
     const roots = new Set(this.data.evolution.layers[0] ?? []);
@@ -150,90 +241,51 @@ export class GraphView {
     return picked;
   }
 
-  exportSvg(): string | null {
-    if (!this.svg) return null;
-    const clone = this.svg.cloneNode(true) as SVGSVGElement;
-    clone.setAttribute("xmlns", SVG_NS);
-    return new XMLSerializer().serializeToString(clone);
-  }
-
-  async exportPng(): Promise<Blob | null> {
-    if (this.canvas) {
-      return new Promise((resolve) => this.canvas?.toBlob(resolve, "image/png"));
-    }
-    const text = this.exportSvg();
-    if (!text) return null;
-    const image = new Image();
-    const url = URL.createObjectURL(new Blob([text], { type: "image/svg+xml" }));
-    await new Promise((resolve, reject) => {
-      image.onload = resolve;
-      image.onerror = reject;
-      image.src = url;
-    });
-    const target = document.createElement("canvas");
-    target.width = this.root.clientWidth * 2;
-    target.height = this.root.clientHeight * 2;
-    const context = target.getContext("2d");
-    if (!context) return null;
-    context.scale(2, 2);
-    context.drawImage(image, 0, 0);
-    URL.revokeObjectURL(url);
-    return new Promise((resolve) => target.toBlob(resolve, "image/png"));
-  }
-
-  private reach(start: number, direction: "in" | "out"): Set<number> {
-    if (!this.data) return new Set();
-    const adjacency = new Map<number, number[]>();
-    for (const [src, dst] of this.data.evolution.edges) {
-      const [from, to] = direction === "out" ? [src, dst] : [dst, src];
-      const list = adjacency.get(from);
-      if (list) list.push(to);
-      else adjacency.set(from, [to]);
-    }
-    const seen = new Set<number>();
-    let frontier = [start];
-    while (frontier.length) {
-      const next: number[] = [];
-      for (const node of frontier) {
-        for (const neighbor of adjacency.get(node) ?? []) {
-          if (!seen.has(neighbor)) {
-            seen.add(neighbor);
-            next.push(neighbor);
-          }
-        }
-      }
-      frontier = next;
-    }
-    return seen;
-  }
-
+  /** Fit to width, keep chips readable, and start at the top for tall graphs. */
   private fit(): void {
     if (!this.data || this.data.positions.size === 0) return;
-    // The host can measure 0x0 mid-layout; fall back to nominal dimensions
-    // and let the ResizeObserver refit once real sizes arrive.
     this.fitUsedFallback = this.root.clientWidth === 0 || this.root.clientHeight === 0;
     const hostWidth = this.root.clientWidth || 800;
     const hostHeight = this.root.clientHeight || 500;
-    const xs = [...this.data.positions.values()].map((p) => p[0]);
-    const ys = [...this.data.positions.values()].map((p) => p[1]);
-    const width = Math.max(...xs) - Math.min(...xs) + 2 * SCALE;
-    const height = Math.max(...ys) - Math.min(...ys) + 2 * SCALE;
-    const k = Math.max(
-      0.02,
-      Math.min(1.2, hostWidth / Math.max(width, 1), hostHeight / Math.max(height, 1)),
-    );
+    const { minX, maxX, minY, maxY } = this.data.bounds;
+    const width = maxX - minX + X_SCALE * 1.7;
+    const height = maxY - minY + Y_SCALE * 1.2;
+    const widthFit = (hostWidth - 24) / width;
+    const allFit = Math.min(widthFit, (hostHeight - 24) / height);
+    const k = Math.min(1.15, Math.max(allFit, Math.min(0.62, widthFit)));
+    const contentHeight = height * k;
     this.transform = {
       k,
-      x: hostWidth / 2 - ((Math.max(...xs) + Math.min(...xs)) / 2) * k,
-      y: 30 - Math.min(...ys) * k,
+      x: hostWidth / 2 - ((maxX + minX) / 2) * k,
+      y:
+        contentHeight < hostHeight
+          ? (hostHeight - contentHeight) / 2 - (minY - Y_SCALE * 0.6) * k
+          : 36 - minY * k,
     };
+  }
+
+  /** Pan just enough that the given step's row is on screen. */
+  private keepStepVisible(step: number): void {
+    if (!this.data) return;
+    const first = this.data.evolution.layers[step]?.[0];
+    if (first === undefined) return;
+    const position = this.data.positions.get(first);
+    if (!position) return;
+    const { y, k } = this.transform;
+    const screenY = position[1] * k + y;
+    const hostHeight = this.root.clientHeight;
+    const margin = CHIP_HEIGHT * k + 28;
+    if (screenY > hostHeight - margin) {
+      this.transform = { ...this.transform, y: y - (screenY - (hostHeight - margin)) };
+    } else if (screenY < margin) {
+      this.transform = { ...this.transform, y: y + (margin - screenY) };
+    }
   }
 
   private nodeVisible(node: number): boolean {
     return (this.data?.layerOf.get(node) ?? 0) <= this.visibleStep;
   }
 
-  /** Full rebuild: chooses SVG or canvas by node count. */
   rebuild(): void {
     this.root.querySelector(".graph-surface")?.remove();
     this.svg = null;
@@ -247,97 +299,163 @@ export class GraphView {
     this.refresh();
   }
 
+  private edgePath(from: [number, number], to: [number, number], src: number, dst: number): string {
+    const x1 = from[0];
+    const y1 = from[1] + CHIP_HEIGHT / 2;
+    const x2 = to[0];
+    const y2 = to[1] - CHIP_HEIGHT / 2;
+    if (src === dst) {
+      const [x, y] = from;
+      return `M ${x + 20} ${y - 8} C ${x + 62} ${y - 34}, ${x + 62} ${y + 34}, ${x + 20} ${y + 8}`;
+    }
+    if (y2 <= y1) {
+      const bulge = 70 + Math.abs(y1 - y2) * 0.15;
+      const ax = Math.max(x1, x2) + bulge;
+      return `M ${x1} ${y1} C ${ax} ${y1 + 40}, ${ax} ${y2 - 40}, ${x2} ${y2}`;
+    }
+    const bend = (y2 - y1) * 0.55;
+    return `M ${x1} ${y1} C ${x1} ${y1 + bend}, ${x2} ${y2 - bend}, ${x2} ${y2}`;
+  }
+
   private buildSvg(): void {
     if (!this.data) return;
+    const { evolution, positions, ruleSlot, bounds } = this.data;
     const svg = document.createElementNS(SVG_NS, "svg");
     svg.classList.add("graph-surface");
     svg.setAttribute("role", "img");
     svg.setAttribute("aria-label", "Multiway evolution graph");
     const defs = document.createElementNS(SVG_NS, "defs");
     defs.innerHTML =
-      '<marker id="ge-arrow" viewBox="0 0 10 10" refX="9" refY="5"' +
-      ' markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">' +
-      '<path d="M 0 0 L 10 5 L 0 10 z" class="arrowhead"/></marker>';
+      '<marker id="ge-arrow" viewBox="0 0 10 10" refX="8.5" refY="5"' +
+      ' markerWidth="6" markerHeight="6" orient="auto-start-reverse">' +
+      '<path d="M 0 0 L 10 5 L 0 10 z" class="arrowhead"/></marker>' +
+      '<filter id="ge-glow" x="-40%" y="-60%" width="180%" height="220%">' +
+      '<feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#2a78d6" flood-opacity="0.75"/>' +
+      "</filter>";
     svg.append(defs);
     const viewport = document.createElementNS(SVG_NS, "g");
     viewport.classList.add("viewport");
 
-    this.data.evolution.edges.forEach(([src, dst, rule], edgeIndex) => {
-      const from = this.data?.positions.get(src);
-      const to = this.data?.positions.get(dst);
+    const bands = document.createElementNS(SVG_NS, "g");
+    bands.classList.add("bands");
+    const bandLeft = bounds.minX - X_SCALE * 0.85;
+    const bandWidth = bounds.maxX - bounds.minX + X_SCALE * 1.7;
+    evolution.layers.forEach((layer, index) => {
+      const first = layer[0];
+      const position = first === undefined ? undefined : positions.get(first);
+      if (!position) return;
+      const band = document.createElementNS(SVG_NS, "rect");
+      band.classList.add("band");
+      if (index % 2 === 1) band.classList.add("band-alt");
+      band.setAttribute("x", String(bandLeft));
+      band.setAttribute("y", String(position[1] - Y_SCALE / 2));
+      band.setAttribute("width", String(bandWidth));
+      band.setAttribute("height", String(Y_SCALE));
+      band.setAttribute("rx", "10");
+      bands.append(band);
+      const label = document.createElementNS(SVG_NS, "text");
+      label.classList.add("band-label");
+      label.textContent = `step ${index}`;
+      label.setAttribute("x", String(bandLeft + 12));
+      label.setAttribute("y", String(position[1] - Y_SCALE / 2 + 15));
+      bands.append(label);
+    });
+    viewport.append(bands);
+
+    const edgeLayer = document.createElementNS(SVG_NS, "g");
+    evolution.edges.forEach(([src, dst, rule], edgeIndex) => {
+      const from = positions.get(src);
+      const to = positions.get(dst);
       if (!from || !to) return;
       const group = document.createElementNS(SVG_NS, "g");
       group.classList.add("edge");
+      const slot = ruleSlot.get(rule) ?? -1;
+      if (slot >= 0) group.classList.add(`rule-${slot}`);
       group.dataset["src"] = String(src);
       group.dataset["dst"] = String(dst);
       group.dataset["idx"] = String(edgeIndex);
-      const line = document.createElementNS(SVG_NS, "line");
-      if (src === dst) {
-        const loop = document.createElementNS(SVG_NS, "path");
-        const [x, y] = from;
-        loop.setAttribute(
-          "d",
-          `M ${x + 14} ${y - 6} C ${x + 46} ${y - 26}, ${x + 46} ${y + 26}, ${x + 14} ${y + 6}`,
-        );
-        loop.classList.add("edge-line");
-        loop.setAttribute("marker-end", "url(#ge-arrow)");
-        group.append(loop);
-      } else {
-        line.setAttribute("x1", String(from[0]));
-        line.setAttribute("y1", String(from[1] + CHIP_HEIGHT / 2));
-        line.setAttribute("x2", String(to[0]));
-        line.setAttribute("y2", String(to[1] - CHIP_HEIGHT / 2));
-        line.classList.add("edge-line");
-        line.setAttribute("marker-end", "url(#ge-arrow)");
-        group.append(line);
-      }
+      const path = document.createElementNS(SVG_NS, "path");
+      path.setAttribute("d", this.edgePath(from, to, src, dst));
+      path.classList.add("edge-line");
+      path.setAttribute("marker-end", "url(#ge-arrow)");
+      group.append(path);
       const label = document.createElementNS(SVG_NS, "text");
       label.textContent = rule;
       label.classList.add("edge-label");
-      label.setAttribute("x", String((from[0] + to[0]) / 2 + 4));
-      label.setAttribute("y", String((from[1] + to[1]) / 2));
+      const midX = src === dst ? from[0] + 66 : (from[0] + to[0]) / 2;
+      const midY = src === dst ? from[1] + 3 : (from[1] + to[1]) / 2 + 3;
+      label.setAttribute("x", String(midX));
+      label.setAttribute("y", String(midY));
+      label.setAttribute("text-anchor", "middle");
       group.append(label);
-      viewport.append(group);
+      edgeLayer.append(group);
     });
+    viewport.append(edgeLayer);
 
     for (const [a, b] of this.branchialEdges) {
-      const from = this.data.positions.get(a);
-      const to = this.data.positions.get(b);
+      const from = positions.get(a);
+      const to = positions.get(b);
       if (!from || !to) continue;
-      const line = document.createElementNS(SVG_NS, "line");
+      const line = document.createElementNS(SVG_NS, "path");
       line.classList.add("branchial-line");
-      line.setAttribute("x1", String(from[0]));
-      line.setAttribute("y1", String(from[1]));
-      line.setAttribute("x2", String(to[0]));
-      line.setAttribute("y2", String(to[1]));
+      const top = CHIP_HEIGHT / 2;
+      const lift = 26;
+      line.setAttribute(
+        "d",
+        `M ${from[0]} ${from[1] - top} C ${from[0]} ${from[1] - top - lift}, ` +
+          `${to[0]} ${to[1] - top - lift}, ${to[0]} ${to[1] - top}`,
+      );
       viewport.append(line);
     }
 
-    for (const [id] of this.data.positions) {
-      const position = this.data.positions.get(id);
+    const nodeLayer = document.createElementNS(SVG_NS, "g");
+    for (const [id, pc, registers] of evolution.nodes) {
+      const position = positions.get(id);
       if (!position) continue;
-      const label = this.data.labels.get(id) ?? String(id);
+      const { badge, total } = chipWidth(pc, registers);
+      const [x, y] = position;
+      const left = x - total / 2;
+      const top = y - CHIP_HEIGHT / 2;
       const group = document.createElementNS(SVG_NS, "g");
       group.classList.add("node");
       group.dataset["id"] = String(id);
       group.setAttribute("tabindex", "0");
       group.setAttribute("role", "button");
-      group.setAttribute("aria-label", `State ${label}`);
-      const terminalKind = this.data.evolution.terminals[String(id)];
+      group.setAttribute("aria-label", `State at pc ${pc} with registers ${registers.join(", ")}`);
+      const terminalKind = evolution.terminals[String(id)];
       if (terminalKind) group.classList.add(`terminal-${terminalKind}`);
-      const width = Math.max(34, label.length * 7 + 14);
-      const rect = document.createElementNS(SVG_NS, "rect");
-      rect.setAttribute("x", String(position[0] - width / 2));
-      rect.setAttribute("y", String(position[1] - CHIP_HEIGHT / 2));
-      rect.setAttribute("width", String(width));
-      rect.setAttribute("height", String(CHIP_HEIGHT));
-      rect.setAttribute("rx", "6");
-      const text = document.createElementNS(SVG_NS, "text");
-      text.textContent = label;
-      text.setAttribute("x", String(position[0]));
-      text.setAttribute("y", String(position[1] + 4));
-      text.setAttribute("text-anchor", "middle");
-      group.append(rect, text);
+
+      const chip = document.createElementNS(SVG_NS, "rect");
+      chip.classList.add("chip");
+      chip.setAttribute("x", String(left));
+      chip.setAttribute("y", String(top));
+      chip.setAttribute("width", String(total));
+      chip.setAttribute("height", String(CHIP_HEIGHT));
+      chip.setAttribute("rx", "9");
+
+      const badgeRect = document.createElementNS(SVG_NS, "rect");
+      badgeRect.classList.add("badge");
+      badgeRect.setAttribute("x", String(left + 3));
+      badgeRect.setAttribute("y", String(top + 3));
+      badgeRect.setAttribute("width", String(badge - 4));
+      badgeRect.setAttribute("height", String(CHIP_HEIGHT - 6));
+      badgeRect.setAttribute("rx", "7");
+
+      const badgeText = document.createElementNS(SVG_NS, "text");
+      badgeText.classList.add("badge-text");
+      badgeText.textContent = String(pc);
+      badgeText.setAttribute("x", String(left + 1 + badge / 2));
+      badgeText.setAttribute("y", String(y + 4));
+      badgeText.setAttribute("text-anchor", "middle");
+
+      const regText = document.createElementNS(SVG_NS, "text");
+      regText.classList.add("reg-text");
+      regText.textContent = registers.join(", ");
+      regText.setAttribute("x", String(left + badge + (total - badge) / 2));
+      regText.setAttribute("y", String(y + 4));
+      regText.setAttribute("text-anchor", "middle");
+
+      group.append(chip, badgeRect, badgeText, regText);
       const activate = () => this.select(this.selected === id ? null : id);
       group.addEventListener("click", (event) => {
         event.stopPropagation();
@@ -349,8 +467,9 @@ export class GraphView {
           activate();
         }
       });
-      viewport.append(group);
+      nodeLayer.append(group);
     }
+    viewport.append(nodeLayer);
 
     svg.append(viewport);
     svg.addEventListener("click", () => this.select(null));
@@ -372,7 +491,6 @@ export class GraphView {
     this.canvas = canvas;
   }
 
-  /** Cheap refresh: visibility, highlighting, zoom transform. */
   refresh(): void {
     if (this.canvas) {
       this.paintCanvas();
@@ -425,7 +543,7 @@ export class GraphView {
     context.translate(x, y);
     context.scale(k, k);
     context.strokeStyle = edgeColor;
-    context.globalAlpha = 0.55;
+    context.globalAlpha = 0.5;
     context.lineWidth = 1;
     context.beginPath();
     for (const [src, dst] of this.data.evolution.edges) {
@@ -442,7 +560,7 @@ export class GraphView {
     for (const [id, position] of this.data.positions) {
       if (!this.nodeVisible(id)) continue;
       context.beginPath();
-      context.arc(position[0], position[1], 3.2, 0, Math.PI * 2);
+      context.arc(position[0], position[1], 3.4, 0, Math.PI * 2);
       context.fill();
     }
   }
@@ -490,4 +608,26 @@ export class GraphView {
       { passive: false },
     );
   }
+}
+
+/** Styles inlined into exported SVGs so they look right outside the page. */
+function exportStyles(): string {
+  return [
+    ".band { fill: #f1f1ee; } .band-alt { fill: #e9e9e5; }",
+    ".band-label { font: 10px sans-serif; fill: #8a8984; }",
+    ".chip { fill: #e8f1fc; stroke: #2a78d6; stroke-width: 1.2; }",
+    ".badge { fill: #2a78d6; } .badge-text { font: 600 11px monospace; fill: #fff; }",
+    ".reg-text { font: 11px monospace; fill: #111; }",
+    ".terminal-halt .chip, .terminal-stuck .chip { fill: #fcecc8; stroke: #b97f00; }",
+    ".terminal-halt .badge, .terminal-stuck .badge { fill: #b97f00; }",
+    ".edge-line { fill: none; stroke: #9a9994; stroke-width: 1.3; }",
+    ".arrowhead { fill: #9a9994; }",
+    ".rule-0 .edge-line { stroke: #2a78d6; } .rule-1 .edge-line { stroke: #eb6834; }",
+    ".rule-2 .edge-line { stroke: #1baf7a; } .rule-3 .edge-line { stroke: #c98500; }",
+    ".rule-4 .edge-line { stroke: #d55181; } .rule-5 .edge-line { stroke: #008300; }",
+    ".rule-6 .edge-line { stroke: #4a3aa7; } .rule-7 .edge-line { stroke: #e34948; }",
+    ".edge-label { font: 9.5px monospace; fill: #555; paint-order: stroke; stroke: #fff; stroke-width: 3px; }",
+    ".branchial-line { fill: none; stroke: #4a3aa7; stroke-width: 1.6; stroke-dasharray: 5 4; }",
+    ".hidden { display: none; } .dimmed { opacity: 0.15; }",
+  ].join("\n");
 }

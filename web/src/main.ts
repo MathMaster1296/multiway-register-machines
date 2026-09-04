@@ -153,6 +153,7 @@ class App {
     this.lastRun = result;
     this.renderDiagrams(result);
     this.view.setEvolution(result.evolution, result.layout);
+    this.renderRuleLegend();
     this.stats.show(result, this.state.preset, null);
     this.renderTable(result);
     this.setupSlider(result);
@@ -185,7 +186,7 @@ class App {
     slider.oninput = () => {
       const step = Number(slider.value);
       element("step-readout").textContent = `step ${step} / ${last}`;
-      this.view.setStep(step);
+      this.view.setStep(step, true);
       if (this.branchialOn) void this.refreshBranchial();
     };
   }
@@ -230,6 +231,34 @@ class App {
     else {
       this.view.setBranchial([]);
     }
+  }
+
+  private renderRuleLegend(): void {
+    const legend = element("rule-legend");
+    legend.replaceChildren();
+    const colors = this.view.ruleColors();
+    let overflow = 0;
+    for (const [rule, slot] of colors) {
+      if (slot < 0) {
+        overflow += 1;
+        continue;
+      }
+      const item = document.createElement("li");
+      const swatch = document.createElement("span");
+      swatch.className = `swatch rule-${slot}`;
+      const code = document.createElement("code");
+      code.textContent = rule;
+      item.append(swatch, code);
+      legend.append(item);
+    }
+    if (overflow) {
+      const item = document.createElement("li");
+      const swatch = document.createElement("span");
+      swatch.className = "swatch";
+      item.append(swatch, `${overflow} more rules in gray`);
+      legend.append(item);
+    }
+    legend.hidden = colors.size === 0 || this.view.usingCanvas;
   }
 
   private renderDiagrams(result: RunOk): void {
