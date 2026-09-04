@@ -11,7 +11,7 @@ Function Repository resource
 **Live explorer:**
 [mathmaster1296.github.io/multiway-register-machines](https://mathmaster1296.github.io/multiway-register-machines/)
 
-![The Fibonacci states graph with path counts](docs/figures/fibonacci-dag.svg)
+![The Fibonacci states graph revealing itself step by step](docs/figures/fibonacci-reveal.svg)
 
 ## What a multiway register machine is
 
@@ -85,6 +85,9 @@ The command line covers the common tasks:
 ```bash
 mrm run fibonacci --analyze        # evolve a preset, with exact halting stats
 mrm verify                         # all model invariants, nonzero exit on failure
+mrm path collatz_forward --to "8|0,1" --max-steps 2000   # shortest rule path
+mrm link grid_paths                # a URL that reopens this machine in the explorer
+mrm ensemble --count 200 --out study   # random machines: complexity vs branching
 mrm export ev.json --format dot    # DOT, GraphML, WL, or evolution JSON
 mrm figure all --out figures       # regenerate every figure, byte-identical
 ```
@@ -112,6 +115,19 @@ Some analyses here go further than the WFR resource:
   again, which is the property that decides whether state merging pays off.
 * Figures come from a fixed-pass layered layout with no randomness, so the
   same evolution always renders to the same bytes.
+* `mrm.causal_analysis` reads the data dependencies along a path: an event
+  depends on the latest earlier event that wrote a register it reads. This
+  separates the two reasons branches reconverge. Grid paths split into two
+  independent chains, so merging happens because the updates commute;
+  Fibonacci paths form one total chain, so merging is pure value collision.
+* `mrm.absorption_time_distribution` gives the whole halting-time
+  distribution exactly, not just its mean, and the explorer charts it.
+* `mrm link` prints a URL that reopens the explorer on exactly the machine
+  and settings you name, using the same compressed encoding the site writes
+  into its address bar. Links like these can sit in a paper.
+* `mrm ensemble` samples seeded random machines and plots the paper's
+  complexity measure against the branching their path trees actually
+  realize.
 
 ## Files and formats
 
@@ -133,9 +149,12 @@ afterwards); everything after that is local and works offline.
 
 The page keeps the full machine and every evolution setting in the URL,
 compressed, so any view can be cited by link and reproduced exactly. Step
-playback reveals the evolution layer by layer, branch highlighting shows a
-state's ancestors and descendants, and the current view exports as SVG, PNG,
-or evolution JSON. Graphs under 2000 nodes render as interactive SVG and
+playback reveals the evolution layer by layer, and selecting a state shows
+its ancestors, its descendants, and the shortest path that reaches it. For
+machines in instruction form the page also draws the program itself, the
+same rule and circle diagrams the WFR resource plots. The current view
+exports as SVG, PNG, or evolution JSON, and a copy-link button hands you
+the reproduction URL. Graphs under 2000 nodes render as interactive SVG and
 larger ones fall back to a canvas.
 
 To work on it locally: `npm install && npm run build` inside `web/`, build a

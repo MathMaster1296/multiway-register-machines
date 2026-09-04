@@ -121,6 +121,25 @@ available; counts are never silently wrong.
 
 The growth series is the sequence of layer sizes.
 
+## Causal structure of a path
+
+Fix one path through an evolution and call each rule application along it
+an event. Event ``j`` depends on event ``i`` when ``i`` is the latest
+earlier event that wrote a register ``j`` reads, where a rule reads its
+guard registers together with the registers its updates touch, and writes
+the registers its updates touch. Control flow is excluded deliberately:
+every event reads and writes the program counter, so including it collapses
+every path to a single chain.
+
+This data view separates the two mechanisms behind state merging. When the
+rules of a branch touch disjoint registers, the events of any path split
+into independent chains and different interleavings commute, which is why
+grid paths reconverge. When every rule touches the same register, a path is
+one total chain and merging can only come from different histories reaching
+equal values, which is what happens in the Fibonacci recursion. The
+implementation reports the dependency pairs, the number of independent
+chains, and the longest chain of a path.
+
 ## The uniform branching measure
 
 Interpreting each applicable rule of a node as equally probable turns the

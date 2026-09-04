@@ -89,7 +89,13 @@ the original leaves behavior implicit, the decision is recorded here.
     value map exactly to depth 14 and cross-checks the machine's odometer
     set against the value-level closure.
 
-14. The spec's invariant models are additions, not replacements. Grid
+14. The rule and circle diagrams keep the WFR geometry but not its colors.
+    Success and fail branches are blue and orange (this project's validated
+    palette) where the original drew green and red, and jump targets past
+    the program end appear as open dashed halt nodes, which the original
+    leaves implicit.
+
+15. The spec's invariant models are additions, not replacements. Grid
     paths, recursion Fibonacci, and reverse Collatz do not appear in the
     notebook; they ship alongside the paper's own machines because their
     closed-form invariants (binomials, Fibonacci path counts, Collatz
