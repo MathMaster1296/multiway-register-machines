@@ -97,13 +97,14 @@ export class MachineEditor {
     value: string,
     label: string,
     apply: (text: string) => void,
-    options: { size?: number } = {},
+    options: { size?: number; numeric?: boolean } = {},
   ): HTMLInputElement {
     const element = window.document.createElement("input");
     element.type = "text";
     element.value = value;
     element.setAttribute("aria-label", label);
     if (options.size) element.size = options.size;
+    if (options.numeric) element.inputMode = "numeric";
     element.addEventListener("change", () => apply(element.value));
     return element;
   }
@@ -138,7 +139,7 @@ export class MachineEditor {
           doc.initial = [pc, resize(regs, count)];
           this.callbacks.onChange();
           this.render();
-        }, { size: 3 }),
+        }, { size: 3, numeric: true }),
       ),
       labeled(
         "Initial pc",
@@ -147,7 +148,7 @@ export class MachineEditor {
           if (!Number.isInteger(pc) || pc < 1) return;
           doc.initial = [pc, doc.initial?.[1] ?? new Array(doc.n_registers).fill(0)];
           this.callbacks.onChange();
-        }, { size: 3 }),
+        }, { size: 3, numeric: true }),
       ),
       labeled(
         "Initial registers",
@@ -202,7 +203,7 @@ export class MachineEditor {
         this.input(String(rule.pc_from), `Rule ${rule.id} source pc`, (text) =>
           this.applyRowEdit(index, (r) => {
             r.pc_from = parsePc(text);
-          }), { size: 3 }),
+          }), { size: 3, numeric: true }),
       );
       row.insertCell().append(
         this.input(formatGuard(rule.guard), `Rule ${rule.id} guard`, (text) =>
@@ -220,7 +221,7 @@ export class MachineEditor {
         this.input(String(rule.pc_to), `Rule ${rule.id} target pc`, (text) =>
           this.applyRowEdit(index, (r) => {
             r.pc_to = parsePc(text);
-          }), { size: 3 }),
+          }), { size: 3, numeric: true }),
       );
       const remove = window.document.createElement("button");
       remove.textContent = "delete";
@@ -244,6 +245,13 @@ export class MachineEditor {
       }
     });
     this.root.append(table);
+
+    const hint = window.document.createElement("p");
+    hint.className = "muted small hint";
+    hint.textContent =
+      "Guards look like r1>0 & r2%2==1 and updates like r1-=1, r2+=2. " +
+      "A rule with no guard always applies.";
+    this.root.append(hint);
 
     const addButton = window.document.createElement("button");
     addButton.textContent = "add rule";

@@ -20,7 +20,8 @@ program of increment and decrement instructions, where a decrement on an
 empty register takes a separate fail branch. A multiway register machine
 makes one change: an instruction may list several jump targets instead of
 one. The machine no longer has a single next state, so evolution produces a
-graph of every reachable configuration rather than a sequence.
+graph of every reachable configuration, where an ordinary machine would
+produce one sequence.
 
 Two views of that evolution matter. The tree keeps every computational path
 separate, so it grows as fast as the paths multiply. The states graph merges
@@ -121,7 +122,8 @@ Some analyses here go further than the WFR resource:
   independent chains, so merging happens because the updates commute;
   Fibonacci paths form one total chain, so merging is pure value collision.
 * `mrm.absorption_time_distribution` gives the whole halting-time
-  distribution exactly, not just its mean, and the explorer charts it.
+  distribution exactly, step by step, and the explorer charts it. Its mean
+  recovers the expected step count.
 * `mrm link` prints a URL that reopens the explorer on exactly the machine
   and settings you name, using the same compressed encoding the site writes
   into its address bar. Links like these can sit in a paper.

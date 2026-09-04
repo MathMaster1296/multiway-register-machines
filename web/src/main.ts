@@ -281,6 +281,14 @@ class App {
     await this.runAndRender();
   }
 
+  zoom(factor: number): void {
+    this.view.zoomBy(factor);
+  }
+
+  fit(): void {
+    this.view.fitView();
+  }
+
   nudgeStep(delta: number): void {
     const slider = element<HTMLInputElement>("step-slider");
     const next = Number(slider.value) + delta;
@@ -441,6 +449,25 @@ document.addEventListener("keydown", (event) => {
     app.nudgeStep(-1);
   }
 });
+element("zoom-in").addEventListener("click", () => app.zoom(1.25));
+element("zoom-out").addEventListener("click", () => app.zoom(0.8));
+element("zoom-fit").addEventListener("click", () => app.fit());
+element("graph-host").addEventListener("keydown", (event) => {
+  if (event.key === "+" || event.key === "=") app.zoom(1.25);
+  else if (event.key === "-") app.zoom(0.8);
+  else if (event.key === "0") app.fit();
+  else return;
+  event.preventDefault();
+});
+try {
+  const help = element<HTMLDetailsElement>("help");
+  help.open = localStorage.getItem("mrm-help-seen") !== "yes";
+  help.addEventListener("toggle", () => {
+    if (!help.open) localStorage.setItem("mrm-help-seen", "yes");
+  });
+} catch {
+  // Storage can be unavailable; the help panel simply stays at its default.
+}
 element("export-svg").addEventListener("click", () => app.downloadSvg());
 element("export-png").addEventListener("click", () => void app.downloadPng());
 element("export-json").addEventListener("click", () => app.downloadJson());

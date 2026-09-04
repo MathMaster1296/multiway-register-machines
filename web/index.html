@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="static/styles.css">
 </head>
 <body>
+<a class="skip-link" href="#graph-host">Skip to the graph</a>
 <header class="topbar">
   <div class="brand">
     <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
@@ -35,7 +36,7 @@
   </nav>
 </header>
 
-<div id="banner" class="banner" hidden></div>
+<div id="banner" class="banner" role="status" aria-live="polite" hidden></div>
 
 <main class="panes">
   <section class="pane pane-editor" aria-label="Machine editor">
@@ -48,24 +49,37 @@
     <div id="editor-host"></div>
     <details id="diagrams" hidden>
       <summary>Program diagrams</summary>
+      <p class="muted small">Boxes are instructions, shaded by the register
+      they touch, with an arrow marker for increment or decrement. Blue arcs
+      are success branches and orange arcs are fail branches. The circle
+      shows the same program as a control graph.</p>
       <div id="diagram-host" class="diagram-host"></div>
     </details>
     <p class="button-row">
       <button id="import-button" class="quiet">import machine.json</button>
-      <input id="import-file" type="file" accept=".json,application/json" hidden>
+      <input id="import-file" type="file" accept=".json,application/json" aria-label="Choose a machine.json file" hidden>
     </p>
     <h2>Evolution</h2>
     <div class="controls-grid">
       <label><span>Mode</span>
-        <select id="mode-select">
+        <select id="mode-select" aria-describedby="mode-hint">
           <option value="states">states (merge)</option>
           <option value="tree">tree (all paths)</option>
         </select>
       </label>
-      <label><span>Max steps</span><input id="max-steps" type="text" size="6" value="60"></label>
-      <label><span>Max states</span><input id="max-states" type="text" size="8" value="20000"></label>
-      <label><span>Max frontier</span><input id="max-frontier" type="text" size="8" value="10000"></label>
+      <label title="How many steps to evolve before stopping"><span>Max steps</span>
+        <input id="max-steps" type="text" inputmode="numeric" size="6" value="60"></label>
+      <label title="Stop once this many distinct states have been found"><span>Max states</span>
+        <input id="max-states" type="text" inputmode="numeric" size="8" value="20000"></label>
+      <label title="Stop if a single step would have more states than this"><span>Max frontier</span>
+        <input id="max-frontier" type="text" inputmode="numeric" size="8" value="10000"></label>
     </div>
+    <p id="mode-hint" class="muted small">
+      States mode merges configurations that coincide, so you get a graph.
+      Tree mode keeps every path separate, so it grows quickly. The caps stop
+      a run that would otherwise go on forever; a banner tells you when one
+      fires.
+    </p>
     <div class="button-row">
       <button id="run-button">run</button>
       <button id="cancel-button" class="quiet">cancel</button>
@@ -74,16 +88,44 @@
 
   <section class="pane pane-graph" aria-label="Evolution graph">
     <div class="graph-toolbar">
-      <button id="play-button">play</button>
+      <button id="play-button" title="Reveal the evolution one step at a time (space bar)">play</button>
       <input id="step-slider" type="range" min="0" max="0" value="0"
              aria-label="Visible evolution step">
       <span id="step-readout" aria-live="polite">step 0 / 0</span>
-      <label class="toggle"><input id="branchial-toggle" type="checkbox"> branchial</label>
-      <label class="toggle"><input id="table-toggle" type="checkbox"> table view</label>
+      <label class="toggle" title="Connect states in the current step that share a parent">
+        <input id="branchial-toggle" type="checkbox"> branchial</label>
+      <label class="toggle" title="List the states as a text table">
+        <input id="table-toggle" type="checkbox"> table view</label>
+      <span class="zoom-group" role="group" aria-label="Zoom">
+        <button id="zoom-out" class="quiet" aria-label="Zoom out">&minus;</button>
+        <button id="zoom-in" class="quiet" aria-label="Zoom in">+</button>
+        <button id="zoom-fit" class="quiet" aria-label="Fit the whole graph">fit</button>
+      </span>
     </div>
-    <div id="graph-host" class="graph-host">
+    <div id="graph-host" class="graph-host" tabindex="0"
+         aria-label="Evolution graph. Drag to pan, scroll or use the zoom buttons to zoom.">
       <div id="engine-status" class="engine-status" role="status">Loading</div>
     </div>
+    <ul class="legend" aria-label="Legend">
+      <li><span class="swatch swatch-state"></span>a configuration: pc, then registers</li>
+      <li><span class="swatch swatch-halt"></span>nowhere left to go</li>
+      <li><span class="swatch swatch-ancestor"></span>ancestors of the selected state</li>
+      <li><span class="swatch swatch-descendant"></span>its descendants</li>
+      <li><span class="swatch swatch-path"></span>shortest way to reach it</li>
+      <li><span class="swatch swatch-branchial"></span>branchial ties</li>
+    </ul>
+    <details id="help" class="help">
+      <summary>How to read this</summary>
+      <p>Each chip is one configuration of the machine, written as the program
+      counter and then the register values. An arrow is one rule firing, and
+      its label is the rule's id. The rows are steps: everything in a row was
+      first reached at that step, so the play button and the slider show the
+      evolution unfolding in time.</p>
+      <p>Click a chip to see where it came from and where it leads. Drag to
+      pan, scroll to zoom, or use the zoom buttons. If the graph is hard to
+      see, the table view lists the same states as text, and every figure can
+      be exported.</p>
+    </details>
     <p id="canvas-note" class="muted small" hidden>
       Large graph: drawn on a canvas without labels. Graphs under 2000 nodes
       get the interactive view.
@@ -96,7 +138,7 @@
     <div id="stats-body"></div>
     <h2>Export</h2>
     <div class="button-row">
-      <button id="copy-link">copy link</button>
+      <button id="copy-link" title="Copy a URL that reopens exactly this view">copy link</button>
       <button id="export-svg" class="quiet">SVG</button>
       <button id="export-png" class="quiet">PNG</button>
       <button id="export-json" class="quiet">JSON</button>

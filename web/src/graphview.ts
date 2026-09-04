@@ -83,6 +83,23 @@ export class GraphView {
     this.refresh();
   }
 
+  /** Zoom around the center of the view; the buttons and keyboard use this. */
+  zoomBy(factor: number): void {
+    this.userMoved = true;
+    const cx = this.root.clientWidth / 2;
+    const cy = this.root.clientHeight / 2;
+    const { x, y, k } = this.transform;
+    const next = Math.min(6, Math.max(0.05, k * factor));
+    this.transform = { k: next, x: cx - ((cx - x) / k) * next, y: cy - ((cy - y) / k) * next };
+    this.refresh();
+  }
+
+  fitView(): void {
+    this.userMoved = false;
+    this.fit();
+    this.refresh();
+  }
+
   setBranchial(edges: [number, number][]): void {
     this.branchialEdges = edges;
     this.rebuild();

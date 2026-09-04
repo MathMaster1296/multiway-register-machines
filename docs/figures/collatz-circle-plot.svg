@@ -1,4 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="443" height="443" viewBox="0 0 443 443" font-family="Helvetica, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="443" height="443" viewBox="0 0 443 443" font-family="Helvetica, Arial, sans-serif" role="img" aria-label="Circle diagram of 9 instructions with success arrows in blue and fail arrows in orange">
+<title>Circle diagram of 9 instructions with success arrows in blue and fail arrows in orange</title>
 <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8f8e88"/></marker></defs>
 <rect width="443" height="443" fill="white"/>
 <line x1="375.6" y1="200.1" x2="353.3" y2="138.6" stroke="#2a78d6" stroke-width="1.6" marker-end="url(#arrow)"/>

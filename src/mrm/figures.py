@@ -24,12 +24,15 @@ NODE_RADIUS = 16.0
 MARGIN = 48.0
 
 
-def _svg_document(width: float, height: float, body: list[str]) -> str:
+def _svg_document(width: float, height: float, body: list[str], title: str | None = None) -> str:
+    label = f' role="img" aria-label="{title}"' if title else ""
     head = (
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width:.0f}" '
         f'height="{height:.0f}" viewBox="0 0 {width:.0f} {height:.0f}" '
-        'font-family="Helvetica, Arial, sans-serif">'
+        f'font-family="Helvetica, Arial, sans-serif"{label}>'
     )
+    if title:
+        head += f"\n<title>{title}</title>"
     defs = (
         '<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" '
         'markerWidth="7" markerHeight="7" orient="auto-start-reverse">'
@@ -85,7 +88,7 @@ def evolution_svg(
             f'<text x="{x:.1f}" y="{y + 4:.1f}" text-anchor="middle" '
             f'font-size="11" fill="#111">{text}</text>'
         )
-    return _svg_document(width, height, body)
+    return _svg_document(width, height, body, title=caption)
 
 
 def growth_svg(series: list[tuple[str, list[int]]], caption: str) -> str:
@@ -279,7 +282,13 @@ def rule_plot_svg(instructions: Sequence[Instruction], n_registers: int) -> str:
             f'<text x="{x_at(i + 0.5):.1f}" y="{y_at(-0.28):.1f}" text-anchor="middle" '
             f'font-size="12" fill="#555">{i}</text>'
         )
-    return _svg_document(width, height, body)
+    return _svg_document(
+        width,
+        height,
+        body,
+        title=f"Rule diagram of {m} instructions: blue arcs are success branches, "
+        "orange arcs are fail branches",
+    )
 
 
 def circle_plot_svg(instructions: Sequence[Instruction], n_registers: int) -> str:
@@ -349,7 +358,13 @@ def circle_plot_svg(instructions: Sequence[Instruction], n_registers: int) -> st
             f'<text x="{cx:.1f}" y="{cy + node_r * scale + 14:.1f}" text-anchor="middle" '
             f'font-size="12" fill="#555">{pc}</text>'
         )
-    return _svg_document(side, side, body)
+    return _svg_document(
+        side,
+        side,
+        body,
+        title=f"Circle diagram of {m} instructions with success arrows in blue "
+        "and fail arrows in orange",
+    )
 
 
 def scatter_svg(rows: Sequence[EnsembleRow], caption: str) -> str:
