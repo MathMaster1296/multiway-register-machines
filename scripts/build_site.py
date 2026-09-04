@@ -42,9 +42,7 @@ def main() -> None:
 
     html = (WEB / "index.html").read_text()
     html = html.replace('src="js/main.js"', f'src="js-{stamp}/main.js"')
-    html = html.replace(
-        'href="static/styles.css"', f'href="static/styles.css?v={stamp}"'
-    )
+    html = html.replace('href="static/styles.css"', f'href="static/styles.css?v={stamp}"')
     (out / "index.html").write_text(html)
     shutil.copytree(WEB / "static", out / "static")
     shutil.copytree(WEB / "js", out / f"js-{stamp}")
@@ -71,9 +69,7 @@ def main() -> None:
     wheels_out = out / "public" / "wheels"
     wheels_out.mkdir(parents=True)
     shutil.copy2(wheel, wheels_out / wheel.name)
-    (out / "public" / "site-meta.json").write_text(
-        json.dumps({"wheel": wheel.name}) + "\n"
-    )
+    (out / "public" / "site-meta.json").write_text(json.dumps({"wheel": wheel.name}) + "\n")
     print(f"assembled {out} (wheel: {wheel.name})")
 
 
