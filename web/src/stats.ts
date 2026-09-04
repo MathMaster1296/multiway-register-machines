@@ -128,6 +128,23 @@ export class StatsPane {
       this.root.append(list);
     }
 
+    if (result.absorption_times) {
+      const times = result.absorption_times;
+      const last = times.probabilities.map((p) => p > 1e-12).lastIndexOf(true);
+      if (last >= 0) {
+        this.root.append(
+          sectionTitle("Halting time"),
+          this.distributionChart(times.probabilities.slice(0, last + 1)),
+        );
+        if (times.tail > 1e-9) {
+          const note = document.createElement("p");
+          note.className = "muted small";
+          note.textContent = `${(times.tail * 100).toFixed(1)}% of the mass never halts or was cut off`;
+          this.root.append(note);
+        }
+      }
+    }
+
     if (result.absorption) {
       const a = result.absorption;
       this.root.append(sectionTitle("Uniform-branching chain (exact)"));
@@ -154,6 +171,37 @@ export class StatsPane {
       p.textContent = `state ${selected} selected: ancestors in orange, descendants outlined in blue`;
       this.root.append(p);
     }
+  }
+
+  private distributionChart(probabilities: number[]): SVGSVGElement {
+    const width = 260;
+    const height = 72;
+    const svg = document.createElementNS(SVG_NS, "svg");
+    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    svg.setAttribute("class", "growth-chart");
+    svg.setAttribute("role", "img");
+    svg.setAttribute(
+      "aria-label",
+      `Probability of halting at each step: ${probabilities
+        .map((p) => p.toFixed(3))
+        .join(", ")}`,
+    );
+    const top = Math.max(...probabilities, 1e-9);
+    const barWidth = width / probabilities.length;
+    probabilities.forEach((value, index) => {
+      const bar = document.createElementNS(SVG_NS, "rect");
+      const barHeight = Math.max(value > 0 ? 1.5 : 0.5, (value / top) * (height - 12));
+      bar.setAttribute("x", String(index * barWidth + 1));
+      bar.setAttribute("rx", "2");
+      bar.setAttribute("y", String(height - barHeight));
+      bar.setAttribute("width", String(Math.max(1, barWidth - 2)));
+      bar.setAttribute("height", String(barHeight));
+      const title = document.createElementNS(SVG_NS, "title");
+      title.textContent = `P(halt at step ${index}) = ${(value * 100).toFixed(2)}%`;
+      bar.append(title);
+      svg.append(bar);
+    });
+    return svg;
   }
 
   private growthChart(series: number[]): SVGSVGElement {

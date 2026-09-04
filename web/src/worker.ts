@@ -15,8 +15,9 @@ const GLUE = `
 import json
 
 from mrm import Config, evolve
-from mrm.analysis import absorption
+from mrm.analysis import absorption, absorption_time_distribution
 from mrm.counting import strongly_connected_components, successor_lists
+from mrm.figures import circle_plot_svg, rule_plot_svg
 from mrm.graph import branchial_graph
 from mrm.layout import layered_layout
 from mrm.machine import complexity
@@ -78,10 +79,23 @@ def mrm_run(doc_text, params_text):
                 if result.expected_steps is None
                 else str(result.expected_steps),
             }
+            horizon = min(4 * len(ev.layers) + 12, 300)
+            dist = absorption_time_distribution(ev, horizon, exact=False)
+            payload["absorption_times"] = {
+                "probabilities": [float(p) for p in dist.probabilities],
+                "tail": float(dist.tail),
+            }
         except Exception as exc:  # analysis is optional; never sink the run
             payload["absorption_error"] = str(exc)
     if doc.machine.instructions is not None:
         payload["complexity"] = complexity(doc.machine.instructions)
+        if len(doc.machine.instructions) <= 40:
+            payload["rule_plot"] = rule_plot_svg(
+                doc.machine.instructions, doc.machine.n_registers
+            )
+            payload["circle_plot"] = circle_plot_svg(
+                doc.machine.instructions, doc.machine.n_registers
+            )
     return json.dumps(payload)
 
 def mrm_branchial(step):

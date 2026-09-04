@@ -73,8 +73,11 @@ export interface RunOk {
   evolution: EvolutionJson;
   layout: Record<string, [number, number]>;
   absorption?: AbsorptionJson;
+  absorption_times?: { probabilities: number[]; tail: number };
   absorption_error?: string;
   complexity?: number;
+  rule_plot?: string;
+  circle_plot?: string;
 }
 
 export interface RunProblems {

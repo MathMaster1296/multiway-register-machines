@@ -29,9 +29,11 @@ export class GraphView {
   private ancestors = new Set<number>();
   private descendants = new Set<number>();
   private branchialEdges: [number, number][] = [];
+  private pathEdges = new Set<number>();
   private svg: SVGSVGElement | null = null;
   private canvas: HTMLCanvasElement | null = null;
   private fitUsedFallback = false;
+  private userMoved = false;
 
   constructor(
     private root: HTMLElement,
@@ -39,7 +41,8 @@ export class GraphView {
   ) {
     this.attachPanZoom();
     new ResizeObserver(() => {
-      if (this.fitUsedFallback && this.data && this.root.clientWidth > 0) {
+      const refittable = this.fitUsedFallback || !this.userMoved;
+      if (refittable && this.data && this.root.clientWidth > 0) {
         this.fit();
         this.refresh();
       }
@@ -68,7 +71,9 @@ export class GraphView {
     this.ancestors.clear();
     this.descendants.clear();
     this.branchialEdges = [];
+    this.pathEdges = new Set();
     this.visibleStep = evolution.layers.length - 1;
+    this.userMoved = false;
     this.fit();
     this.rebuild();
   }
@@ -87,8 +92,45 @@ export class GraphView {
     this.selected = node;
     this.ancestors = node === null ? new Set() : this.reach(node, "in");
     this.descendants = node === null ? new Set() : this.reach(node, "out");
+    this.pathEdges = node === null ? new Set() : this.shortestPathEdges(node);
     this.refresh();
     this.onSelect(node);
+  }
+
+  /** Edge indices of one shortest path from the roots to the node. */
+  private shortestPathEdges(target: number): Set<number> {
+    if (!this.data) return new Set();
+    const roots = new Set(this.data.evolution.layers[0] ?? []);
+    if (roots.has(target)) return new Set();
+    const outgoing = new Map<number, [number, number][]>();
+    this.data.evolution.edges.forEach(([src, dst], index) => {
+      const list = outgoing.get(src);
+      if (list) list.push([dst, index]);
+      else outgoing.set(src, [[dst, index]]);
+    });
+    const via = new Map<number, number>();
+    let frontier = [...roots];
+    while (frontier.length && !via.has(target)) {
+      const next: number[] = [];
+      for (const node of frontier) {
+        for (const [dst, index] of outgoing.get(node) ?? []) {
+          if (!via.has(dst) && !roots.has(dst)) {
+            via.set(dst, index);
+            next.push(dst);
+          }
+        }
+      }
+      frontier = next;
+    }
+    const picked = new Set<number>();
+    let node = target;
+    while (!roots.has(node)) {
+      const index = via.get(node);
+      if (index === undefined) return new Set();
+      picked.add(index);
+      node = this.data.evolution.edges[index]?.[0] ?? node;
+    }
+    return picked;
   }
 
   exportSvg(): string | null {
@@ -203,14 +245,15 @@ export class GraphView {
     const viewport = document.createElementNS(SVG_NS, "g");
     viewport.classList.add("viewport");
 
-    for (const [src, dst, rule] of this.data.evolution.edges) {
-      const from = this.data.positions.get(src);
-      const to = this.data.positions.get(dst);
-      if (!from || !to) continue;
+    this.data.evolution.edges.forEach(([src, dst, rule], edgeIndex) => {
+      const from = this.data?.positions.get(src);
+      const to = this.data?.positions.get(dst);
+      if (!from || !to) return;
       const group = document.createElementNS(SVG_NS, "g");
       group.classList.add("edge");
       group.dataset["src"] = String(src);
       group.dataset["dst"] = String(dst);
+      group.dataset["idx"] = String(edgeIndex);
       const line = document.createElementNS(SVG_NS, "line");
       if (src === dst) {
         const loop = document.createElementNS(SVG_NS, "path");
@@ -238,7 +281,7 @@ export class GraphView {
       label.setAttribute("y", String((from[1] + to[1]) / 2));
       group.append(label);
       viewport.append(group);
-    }
+    });
 
     for (const [a, b] of this.branchialEdges) {
       const from = this.data.positions.get(a);
@@ -339,14 +382,16 @@ export class GraphView {
     for (const element of viewport.querySelectorAll<SVGGElement>("g.edge")) {
       const src = Number(element.dataset["src"]);
       const dst = Number(element.dataset["dst"]);
+      const index = Number(element.dataset["idx"]);
       element.classList.toggle("hidden", !this.nodeVisible(src) || !this.nodeVisible(dst));
-      const onPath =
+      const related =
         !dimming ||
         ((this.ancestors.has(src) || src === this.selected) &&
           (this.ancestors.has(dst) || dst === this.selected)) ||
         ((this.descendants.has(dst) || dst === this.selected) &&
           (this.descendants.has(src) || src === this.selected));
-      element.classList.toggle("dimmed", dimming && !onPath);
+      element.classList.toggle("dimmed", dimming && !related);
+      element.classList.toggle("pathline", this.pathEdges.has(index));
     }
   }
 
@@ -390,6 +435,7 @@ export class GraphView {
     let lastX = 0;
     let lastY = 0;
     this.root.addEventListener("pointerdown", (event) => {
+      this.userMoved = true;
       dragging = true;
       lastX = event.clientX;
       lastY = event.clientY;
@@ -410,6 +456,7 @@ export class GraphView {
       "wheel",
       (event) => {
         event.preventDefault();
+        this.userMoved = true;
         const factor = Math.exp(-event.deltaY * 0.0015);
         const rect = this.root.getBoundingClientRect();
         const px = event.clientX - rect.left;

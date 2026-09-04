@@ -64,17 +64,30 @@ class App {
     this.presets = (await fetchJson("public/presets/manifest.json")) as PresetInfo[];
     this.fillPresetDropdown();
 
+    window.addEventListener("hashchange", () => void this.applyHash());
     const fromUrl = await decodeState(location.hash);
     if (fromUrl) {
-      this.state = fromUrl;
-      this.state.params.analyze = true;
-      element<HTMLSelectElement>("preset-select").value = this.state.preset ?? "";
+      this.applyState(fromUrl);
+      await this.runAndRender();
     } else {
       await this.loadPreset("fibonacci");
-      return;
     }
+  }
+
+  private applyState(state: AppState): void {
+    this.state = state;
+    this.state.params.analyze = true;
+    element<HTMLSelectElement>("preset-select").value = this.state.preset ?? "";
+    element("preset-description").textContent = this.state.doc.description ?? "";
     this.editor.setDocument(this.state.doc);
     this.syncParamInputs();
+  }
+
+  /** A pasted or back/forward link changes the hash without a reload. */
+  private async applyHash(): Promise<void> {
+    const state = await decodeState(location.hash);
+    if (!state) return;
+    this.applyState(state);
     await this.runAndRender();
   }
 
@@ -138,6 +151,7 @@ class App {
     }
     this.editor.setProblems([]);
     this.lastRun = result;
+    this.renderDiagrams(result);
     this.view.setEvolution(result.evolution, result.layout);
     this.stats.show(result, this.state.preset, null);
     this.renderTable(result);
@@ -216,6 +230,63 @@ class App {
     else {
       this.view.setBranchial([]);
     }
+  }
+
+  private renderDiagrams(result: RunOk): void {
+    const details = element<HTMLDetailsElement>("diagrams");
+    const host = element("diagram-host");
+    if (result.rule_plot || result.circle_plot) {
+      details.hidden = false;
+      host.innerHTML = (result.rule_plot ?? "") + (result.circle_plot ?? "");
+    } else {
+      details.hidden = true;
+      host.replaceChildren();
+    }
+  }
+
+  async copyLink(): Promise<void> {
+    const button = element("copy-link");
+    try {
+      await navigator.clipboard.writeText(location.href);
+      button.textContent = "copied";
+    } catch {
+      button.textContent = "copy failed";
+    }
+    window.setTimeout(() => {
+      button.textContent = "copy link";
+    }, 1300);
+  }
+
+  async importDocument(file: File): Promise<void> {
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(await file.text());
+    } catch {
+      this.showBanner(`${file.name} is not valid JSON`, "error");
+      return;
+    }
+    const doc = parsed as MachineDoc;
+    if (doc?.schema !== "mrm/machine/1") {
+      this.showBanner(
+        `${file.name} is not a machine document (expected schema mrm/machine/1)`,
+        "error",
+      );
+      return;
+    }
+    this.state = { doc, params: { ...DEFAULT_PARAMS }, preset: null };
+    element<HTMLSelectElement>("preset-select").value = "";
+    element("preset-description").textContent = doc.description ?? file.name;
+    this.editor.setDocument(doc);
+    this.syncParamInputs();
+    await this.runAndRender();
+  }
+
+  nudgeStep(delta: number): void {
+    const slider = element<HTMLInputElement>("step-slider");
+    const next = Number(slider.value) + delta;
+    if (next < 0 || next > Number(slider.max)) return;
+    slider.value = String(next);
+    slider.dispatchEvent(new Event("input"));
   }
 
   private renderTable(result: RunOk): void {
@@ -350,6 +421,25 @@ element<HTMLInputElement>("branchial-toggle").addEventListener("change", (event)
 });
 element<HTMLInputElement>("table-toggle").addEventListener("change", (event) => {
   element("table-host").hidden = !(event.target as HTMLInputElement).checked;
+});
+element("copy-link").addEventListener("click", () => void app.copyLink());
+element("import-button").addEventListener("click", () => element("import-file").click());
+element<HTMLInputElement>("import-file").addEventListener("change", (event) => {
+  const file = (event.target as HTMLInputElement).files?.[0];
+  if (file) void app.importDocument(file);
+  (event.target as HTMLInputElement).value = "";
+});
+document.addEventListener("keydown", (event) => {
+  const target = event.target as HTMLElement;
+  if (target.closest("input, select, textarea, [contenteditable]")) return;
+  if (event.key === " ") {
+    event.preventDefault();
+    app.togglePlayback();
+  } else if (event.key === "ArrowRight") {
+    app.nudgeStep(1);
+  } else if (event.key === "ArrowLeft") {
+    app.nudgeStep(-1);
+  }
 });
 element("export-svg").addEventListener("click", () => app.downloadSvg());
 element("export-png").addEventListener("click", () => void app.downloadPng());

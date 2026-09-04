@@ -46,6 +46,14 @@
     </label>
     <p id="preset-description" class="muted small"></p>
     <div id="editor-host"></div>
+    <details id="diagrams" hidden>
+      <summary>Program diagrams</summary>
+      <div id="diagram-host" class="diagram-host"></div>
+    </details>
+    <p class="button-row">
+      <button id="import-button" class="quiet">import machine.json</button>
+      <input id="import-file" type="file" accept=".json,application/json" hidden>
+    </p>
     <h2>Evolution</h2>
     <div class="controls-grid">
       <label><span>Mode</span>
@@ -88,6 +96,7 @@
     <div id="stats-body"></div>
     <h2>Export</h2>
     <div class="button-row">
+      <button id="copy-link">copy link</button>
       <button id="export-svg" class="quiet">SVG</button>
       <button id="export-png" class="quiet">PNG</button>
       <button id="export-json" class="quiet">JSON</button>
