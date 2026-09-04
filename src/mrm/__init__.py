@@ -1,16 +1,28 @@
 """Multiway register machine evolution: engine, presets, and analysis."""
 
+from ._version import __version__
 from .analysis import (
     AbsorptionResult,
+    AbsorptionTimeDistribution,
     ProbabilityTable,
     ReconvergenceReport,
     absorption,
+    absorption_time_distribution,
     probability_table,
     reconvergence,
 )
+from .causal import CausalAnalysis, Event, causal_analysis, causal_analysis_to
 from .counting import PathCount, cycle_witness, path_counts, terminal_path_counts
+from .ensemble import EnsembleRow, ensemble
 from .evolve import Edge, Evolution, EvolutionMode, NodeId, TerminalKind, evolve
-from .graph import Graph, ancestors, branchial_graph, descendants, states_graph
+from .graph import (
+    Graph,
+    ancestors,
+    branchial_graph,
+    descendants,
+    shortest_edge_path,
+    states_graph,
+)
 from .layout import layered_layout
 from .machine import (
     Condition,
@@ -25,14 +37,17 @@ from .machine import (
     machine_from_wfr,
     rules_from_instructions,
 )
-
-__version__ = "0.1.0"
+from .weblink import decode_fragment, explorer_link
 
 __all__ = [
     "AbsorptionResult",
+    "AbsorptionTimeDistribution",
+    "CausalAnalysis",
     "Condition",
     "Config",
     "Edge",
+    "EnsembleRow",
+    "Event",
     "Evolution",
     "EvolutionMode",
     "Graph",
@@ -47,12 +62,18 @@ __all__ = [
     "Update",
     "__version__",
     "absorption",
+    "absorption_time_distribution",
     "ancestors",
     "branchial_graph",
+    "causal_analysis",
+    "causal_analysis_to",
     "complexity",
     "cycle_witness",
+    "decode_fragment",
     "descendants",
+    "ensemble",
     "evolve",
+    "explorer_link",
     "instructions_from_wfr",
     "layered_layout",
     "machine_from_instructions",
@@ -61,6 +82,7 @@ __all__ = [
     "probability_table",
     "reconvergence",
     "rules_from_instructions",
+    "shortest_edge_path",
     "states_graph",
     "terminal_path_counts",
 ]

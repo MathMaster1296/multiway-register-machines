@@ -107,3 +107,39 @@ class TestOpenCycle:
         assert result.halting_probability == 1
         assert result.never_halting == 0
         assert result.expected_steps == 2
+
+
+class TestAbsorptionTimeDistribution:
+    def test_fibonacci_matches_hand_computation(self):
+        from mrm.analysis import absorption_time_distribution
+
+        ev = evolve(fibonacci_machine(), Config(1, (4,)))
+        dist = absorption_time_distribution(ev)
+        assert dist.probabilities[:3] == (Fraction(0), Fraction(1, 2), Fraction(1, 2))
+        assert dist.tail == 0
+        assert dist.mean_within_horizon() == absorption(ev).expected_steps
+
+    def test_grid_absorbs_exactly_at_path_length(self):
+        from mrm.analysis import absorption_time_distribution
+
+        ev = evolve(grid_paths_machine(2, 2), Config(1, (0, 0)))
+        dist = absorption_time_distribution(ev)
+        assert dist.probabilities[4] == Fraction(1)
+        assert sum(dist.probabilities) == 1
+
+    def test_closed_cycle_is_all_tail(self):
+        from mrm.analysis import absorption_time_distribution
+
+        ev = evolve(machine_from_wfr([[1, 1, [2], [1]]], 1), Config(1, (0,)))
+        dist = absorption_time_distribution(ev, horizon=15)
+        assert dist.tail == 1
+        assert sum(dist.probabilities) == 0
+
+    def test_float_mode_agrees_with_exact(self):
+        from mrm.analysis import absorption_time_distribution
+
+        ev = evolve(fibonacci_machine(), Config(1, (10,)))
+        exact = absorption_time_distribution(ev)
+        loose = absorption_time_distribution(ev, exact=False)
+        for a, b in zip(exact.probabilities, loose.probabilities, strict=True):
+            assert abs(float(a) - float(b)) < 1e-12

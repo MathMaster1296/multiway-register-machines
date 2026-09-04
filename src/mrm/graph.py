@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .evolve import Evolution, NodeId
+from .evolve import Edge, Evolution, NodeId
 from .machine import Config
 
 
@@ -123,3 +123,38 @@ def _reach(start: NodeId, adjacency: dict[NodeId, list[NodeId]]) -> set[NodeId]:
                     nxt.append(w)
         frontier = nxt
     return seen
+
+
+def shortest_edge_path(ev: Evolution, target: NodeId) -> list[Edge] | None:
+    """One shortest path from the initial layer to ``target``, as edges.
+
+    Ties break toward earlier edges in discovery order, so the result is
+    deterministic. An initial node has the empty path; an unreachable node
+    gives ``None``.
+    """
+    roots = ev.layers[0] if ev.layers else []
+    if target in roots:
+        return []
+    outgoing: dict[NodeId, list[Edge]] = {}
+    for edge in ev.edges:
+        outgoing.setdefault(edge.src, []).append(edge)
+    via: dict[NodeId, Edge] = {}
+    frontier = list(roots)
+    while frontier and target not in via:
+        nxt: list[NodeId] = []
+        for node in frontier:
+            for edge in outgoing.get(node, []):
+                if edge.dst not in via and edge.dst not in roots:
+                    via[edge.dst] = edge
+                    nxt.append(edge.dst)
+        frontier = nxt
+    if target not in via:
+        return None
+    path: list[Edge] = []
+    node = target
+    while node not in roots:
+        edge = via[node]
+        path.append(edge)
+        node = edge.src
+    path.reverse()
+    return path

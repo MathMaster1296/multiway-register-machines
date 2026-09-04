@@ -22,7 +22,7 @@ import json
 from dataclasses import dataclass
 from typing import Any, cast
 
-from . import __version__
+from ._version import __version__
 from .counting import PathCount, terminal_path_counts
 from .evolve import Edge, Evolution, EvolutionMode, TerminalKind, evolve
 from .machine import (

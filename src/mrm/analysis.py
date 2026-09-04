@@ -248,3 +248,75 @@ def reconvergence(ev: Evolution, within: int = 8) -> ReconvergenceReport:
                 elif len(unmerged) < 10:
                     unmerged.append((node, a, b))
     return ReconvergenceReport(within=within, pairs=pairs, merged=merged, unmerged=tuple(unmerged))
+
+
+@dataclass(frozen=True)
+class AbsorptionTimeDistribution:
+    """The distribution of the halting time under the uniform branching measure.
+
+    ``probabilities[t]`` is the probability of reaching a halt or stuck state
+    at exactly step ``t``. ``tail`` is the mass not absorbed within the
+    horizon: mass still in flight, trapped in cycles, or stalled at states a
+    cap cut off. When every trajectory halts within the horizon, the mean of
+    the distribution equals `AbsorptionResult.expected_steps`.
+    """
+
+    probabilities: tuple[Fraction, ...]
+    tail: Fraction
+    horizon: int
+
+    def mean_within_horizon(self) -> Fraction:
+        return sum((t * p for t, p in enumerate(self.probabilities)), Fraction(0))
+
+
+def absorption_time_distribution(
+    ev: Evolution, horizon: int = 200, *, exact: bool = True
+) -> AbsorptionTimeDistribution:
+    """Propagate the uniform-branching mass forward and record absorptions.
+
+    With ``exact`` (the default) all arithmetic is rational. ``exact=False``
+    computes in floats, which is what the web explorer asks for: on cyclic
+    graphs exact denominators grow like ``outdeg ** t``, and floats keep long
+    horizons cheap. Float results are wrapped back into fractions verbatim.
+    """
+    succ = successor_lists(ev)
+    outdeg = {n: len(succ[n]) for n in ev.nodes}
+    absorbing = {n for n, kind in ev.terminals.items() if kind is not TerminalKind.CUTOFF}
+    roots = ev.layers[0] if ev.layers else []
+    mass: dict[NodeId, Fraction | float]
+    if exact:
+        mass = dict.fromkeys(roots, Fraction(1, max(len(roots), 1)))
+        zero: Fraction | float = Fraction(0)
+    else:
+        mass = dict.fromkeys(roots, 1.0 / max(len(roots), 1))
+        zero = 0.0
+
+    probabilities: list[Fraction | float] = []
+    stalled = zero
+    for _ in range(horizon + 1):
+        absorbed = zero
+        moving: dict[NodeId, Fraction | float] = {}
+        for node, amount in mass.items():
+            if node in absorbing:
+                absorbed = absorbed + amount
+            elif outdeg[node] == 0:
+                stalled = stalled + amount  # cut off by a cap: fate unknown
+            else:
+                moving[node] = amount
+        probabilities.append(absorbed)
+        if not moving:
+            mass = {}
+            break
+        nxt: dict[NodeId, Fraction | float] = {}
+        for node, amount in moving.items():
+            share = amount / outdeg[node]
+            for target in succ[node]:
+                nxt[target] = nxt.get(target, zero) + share
+        mass = nxt
+    in_flight = sum(mass.values(), zero)
+    tail = stalled + in_flight
+    return AbsorptionTimeDistribution(
+        probabilities=tuple(Fraction(p) for p in probabilities),
+        tail=Fraction(tail),
+        horizon=horizon,
+    )

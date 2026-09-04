@@ -16,6 +16,8 @@ this port produces; see docs/porting-notes.md.
 
 from __future__ import annotations
 
+import random
+
 from .machine import Condition, Config, Machine, Rule, Update, machine_from_wfr
 
 RawProgram = list[list[object]]
@@ -266,3 +268,31 @@ def collatz_reverse_values(n: int) -> list[int]:
     if n % 6 == 4 and n > 4:
         values.append((n - 1) // 3)
     return values
+
+
+def random_program(
+    seed: int,
+    *,
+    length: int = 4,
+    n_registers: int = 2,
+    max_targets: int = 3,
+) -> RawProgram:
+    """A random WFR-style program, fully determined by the seed.
+
+    Jump targets may point up to two positions past the program end, so halt
+    states occur naturally. Decrement instructions always carry a fail
+    branch list, possibly empty.
+    """
+    rng = random.Random(seed)
+
+    def targets(minimum: int) -> list[int]:
+        return [rng.randint(1, length + 2) for _ in range(rng.randint(minimum, max_targets))]
+
+    program: RawProgram = []
+    for _ in range(length):
+        reg = rng.randint(1, n_registers)
+        if rng.random() < 0.5:
+            program.append([reg, 0, targets(1)])
+        else:
+            program.append([reg, 1, targets(1), targets(0)])
+    return program
