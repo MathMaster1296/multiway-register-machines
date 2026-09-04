@@ -8,8 +8,8 @@ Recursive Functions"](https://community.wolfram.com/groups/-/m/t/3499350) and th
 Function Repository resource
 [MultiwayRegisterMachine](https://resources.wolframcloud.com/FunctionRepository/resources/MultiwayRegisterMachine/).
 
-**Live explorer:**
-[mathmaster1296.github.io/multiway-register-machines](https://mathmaster1296.github.io/multiway-register-machines/)
+The live explorer is at
+[mathmaster1296.github.io/multiway-register-machines](https://mathmaster1296.github.io/multiway-register-machines/).
 
 ![The Fibonacci states graph revealing itself step by step](docs/figures/fibonacci-reveal.svg)
 
