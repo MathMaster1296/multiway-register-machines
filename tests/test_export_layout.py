@@ -49,7 +49,7 @@ def test_layout_is_deterministic_and_layered():
 
 def test_figures_render_valid_svg(tmp_path):
     written = make_figure("all", tmp_path)
-    assert len(written) == len(FIGURES)
+    assert len(written) >= len(FIGURES)
     for path in written:
         root = ET.fromstring(path.read_text())
         assert root.tag.endswith("svg")
@@ -59,3 +59,19 @@ def test_figures_are_reproducible(tmp_path):
     first = {p.name: p.read_text() for p in make_figure("all", tmp_path / "a")}
     second = {p.name: p.read_text() for p in make_figure("all", tmp_path / "b")}
     assert first == second
+
+
+def test_rule_and_circle_plots_render(tmp_path):
+    written = {p.name for p in make_figure("rule-diagrams", tmp_path)}
+    assert written == {"collatz-rule-plot.svg", "collatz-circle-plot.svg"}
+    for path in tmp_path.iterdir():
+        root = ET.fromstring(path.read_text())
+        assert root.tag.endswith("svg")
+
+
+def test_animated_reveal_contains_keyframes(tmp_path):
+    (path,) = make_figure("fibonacci-reveal", tmp_path)
+    text = path.read_text()
+    assert "@keyframes reveal0" in text
+    assert 'class="layer0"' in text
+    ET.fromstring(text)

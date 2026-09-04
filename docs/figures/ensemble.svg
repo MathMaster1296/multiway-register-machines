@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="420" viewBox="0 0 560 420" font-family="Helvetica, Arial, sans-serif">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8f8e88"/></marker></defs>
+<rect width="560" height="420" fill="white"/>
+<text x="280.0" y="24" text-anchor="middle" font-size="15" fill="#222">150 random machines: the complexity measure against realized branching</text>
+<line x1="56.0" y1="364.0" x2="504.0" y2="364.0" stroke="#333"/>
+<line x1="56.0" y1="56.0" x2="56.0" y2="364.0" stroke="#333"/>
+<line x1="56.0" y1="364.0" x2="504.0" y2="56.0" stroke="#999" stroke-width="1" stroke-dasharray="5 4"/>
+<text x="280.0" y="406.0" text-anchor="middle" font-size="12" fill="#555">complexity (predicted branching)</text>
+<text x="18" y="210.0" text-anchor="middle" font-size="12" fill="#555" transform="rotate(-90 18 210.0)">realized branching of the path tree</text>
+<text x="200.5" y="380.0" text-anchor="middle" font-size="11" fill="#777">1</text>
+<text x="48.0" y="268.6" text-anchor="end" font-size="11" fill="#777">1</text>
+<text x="272.8" y="380.0" text-anchor="middle" font-size="11" fill="#777">1.5</text>
+<text x="48.0" y="219.0" text-anchor="end" font-size="11" fill="#777">1.5</text>
+<text x="345.0" y="380.0" text-anchor="middle" font-size="11" fill="#777">2</text>
+<text x="48.0" y="169.3" text-anchor="end" font-size="11" fill="#777">2</text>
+<text x="417.3" y="380.0" text-anchor="middle" font-size="11" fill="#777">2.5</text>
+<text x="48.0" y="119.6" text-anchor="end" font-size="11" fill="#777">2.5</text>
+<text x="489.5" y="380.0" text-anchor="middle" font-size="11" fill="#777">3</text>
+<text x="48.0" y="69.9" text-anchor="end" font-size="11" fill="#777">3</text>
+<circle cx="266.5" cy="364.0" r="3.5" fill="none" stroke="#999" stroke-width="1.2"><title>seed 1: died at step 0</title></circle>
+<circle cx="282.2" cy="264.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 2: complexity 1.565, branching 1.000, 4 states</title></circle>
+<circle cx="325.0" cy="250.0" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 3: complexity 1.861, branching 1.147, 3 states</title></circle>
+<circle cx="353.7" cy="164.1" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 4: complexity 2.060, branching 2.011, 23 states</title></circle>
+<circle cx="260.4" cy="364.0" r="3.5" fill="none" stroke="#999" stroke-width="1.2"><title>seed 5: died at step 0</title></circle>
+<circle cx="345.0" cy="165.3" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 6: complexity 2.000, branching 2.000, 9 states</title></circle>
+<circle cx="282.2" cy="364.0" r="3.5" fill="none" stroke="#999" stroke-width="1.2"><title>seed 7: died at step 0</title></circle>
+<circle cx="260.4" cy="223.5" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 8: complexity 1.414, branching 1.414, 3 states</title></circle>
+<circle cx="282.2" cy="364.0" r="3.5" fill="none" stroke="#999" stroke-width="1.2"><title>seed 9: died at step 0</title></circle>
+<circle cx="353.7" cy="148.2" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 10: complexity 2.060, branching 2.172, 58 states</title></circle>
+<circle cx="266.5" cy="200.0" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 11: complexity 1.456, branching 1.650, 4 states</title></circle>
+<circle cx="325.0" cy="172.2" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 12: complexity 1.861, branching 1.931, 43 states</title></circle>
+<circle cx="306.3" cy="65.9" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 13: complexity 1.732, branching 3.000, 3 states</title></circle>
+<circle cx="413.6" cy="223.5" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 14: complexity 2.475, branching 1.414, 3 states</title></circle>
+<circle cx="410.0" cy="181.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 15: complexity 2.449, branching 1.836, 31 states</title></circle>
+<circle cx="394.2" cy="196.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 16: complexity 2.340, branching 1.685, 73 states</title></circle>
+<circle cx="325.0" cy="165.3" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 17: complexity 1.861, branching 2.000, 1 states</title></circle>
+<circle cx="340.4" cy="163.9" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 18: complexity 1.968, branching 2.014, 42 states</title></circle>
+<circle cx="325.0" cy="223.5" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 19: complexity 1.861, branching 1.414, 3 states</title></circle>
+<circle cx="447.8" cy="106.5" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 20: complexity 2.711, branching 2.591, 39 states</title></circle>
+<circle cx="385.4" cy="190.1" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 21: complexity 2.280, branching 1.750, 38 states</title></circle>
+<circle cx="353.7" cy="188.0" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 22: complexity 2.060, branching 1.772, 7 states</title></circle>
+<circle cx="320.7" cy="150.4" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 23: complexity 1.831, branching 2.150, 20 states</title></circle>
+<circle cx="260.4" cy="264.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 24: complexity 1.414, branching 1.000, 3 states</title></circle>
+<circle cx="374.0" cy="205.5" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 25: complexity 2.200, branching 1.596, 5 states</title></circle>
+<circle cx="266.5" cy="364.0" r="3.5" fill="none" stroke="#999" stroke-width="1.2"><title>seed 26: died at step 0</title></circle>
+<circle cx="356.7" cy="364.0" r="3.5" fill="none" stroke="#999" stroke-width="1.2"><title>seed 27: died at step 0</title></circle>
+<circle cx="227.9" cy="264.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 28: complexity 1.189, branching 1.000, 6 states</title></circle>
+<circle cx="306.3" cy="152.5" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 29: complexity 1.732, branching 2.129, 65 states</title></circle>
+<circle cx="340.4" cy="364.0" r="3.5" fill="none" stroke="#999" stroke-width="1.2"><title>seed 30: died at step 0</title></circle>
+<circle cx="282.2" cy="264.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 31: complexity 1.565, branching 1.000, 4 states</title></circle>
+<circle cx="246.2" cy="217.0" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 32: complexity 1.316, branching 1.480, 4 states</title></circle>
+<circle cx="333.0" cy="264.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 33: complexity 1.917, branching 1.000, 2 states</title></circle>
+<circle cx="306.3" cy="202.0" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 34: complexity 1.732, branching 1.631, 23 states</title></circle>
+<circle cx="375.9" cy="222.4" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 35: complexity 2.213, branching 1.425, 17 states</title></circle>
+<circle cx="306.3" cy="255.7" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 36: complexity 1.732, branching 1.091, 13 states</title></circle>
+<circle cx="340.4" cy="364.0" r="3.5" fill="none" stroke="#999" stroke-width="1.2"><title>seed 37: died at step 0</title></circle>
+<circle cx="489.5" cy="136.2" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 38: complexity 3.000, branching 2.293, 31 states</title></circle>
+<circle cx="282.2" cy="250.0" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 39: complexity 1.565, branching 1.147, 17 states</title></circle>
+<circle cx="306.3" cy="201.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 40: complexity 1.732, branching 1.635, 7 states</title></circle>
+<circle cx="266.5" cy="191.9" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 41: complexity 1.456, branching 1.732, 4 states</title></circle>
+<circle cx="447.8" cy="202.8" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 42: complexity 2.711, branching 1.622, 4 states</title></circle>
+<circle cx="282.2" cy="227.1" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 43: complexity 1.565, branching 1.378, 4 states</title></circle>
+<circle cx="375.9" cy="209.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 44: complexity 2.213, branching 1.554, 2 states</title></circle>
+<circle cx="353.7" cy="245.8" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 45: complexity 2.060, branching 1.189, 24 states</title></circle>
+<circle cx="306.3" cy="264.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 46: complexity 1.732, branching 1.000, 4 states</title></circle>
+<circle cx="370.7" cy="250.0" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 47: complexity 2.178, branching 1.147, 8 states</title></circle>
+<circle cx="306.3" cy="264.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 48: complexity 1.732, branching 1.000, 4 states</title></circle>
+<circle cx="353.7" cy="228.5" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 49: complexity 2.060, branching 1.364, 6 states</title></circle>
+<circle cx="370.7" cy="250.0" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 50: complexity 2.178, branching 1.147, 3 states</title></circle>
+<circle cx="356.7" cy="250.0" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 51: complexity 2.081, branching 1.147, 8 states</title></circle>
+<circle cx="288.9" cy="223.5" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 52: complexity 1.612, branching 1.414, 6 states</title></circle>
+<circle cx="295.2" cy="231.5" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 53: complexity 1.655, branching 1.334, 17 states</title></circle>
+<circle cx="313.0" cy="223.5" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 54: complexity 1.778, branching 1.414, 12 states</title></circle>
+<circle cx="282.2" cy="255.7" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 55: complexity 1.565, branching 1.091, 2 states</title></circle>
+<circle cx="306.3" cy="211.4" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 56: complexity 1.732, branching 1.536, 40 states</title></circle>
+<circle cx="340.4" cy="155.0" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 57: complexity 1.968, branching 2.104, 32 states</title></circle>
+<circle cx="353.7" cy="147.4" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 58: complexity 2.060, branching 2.180, 66 states</title></circle>
+<circle cx="333.0" cy="195.9" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 59: complexity 1.917, branching 1.691, 51 states</title></circle>
+<circle cx="266.5" cy="237.3" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 60: complexity 1.456, branching 1.275, 9 states</title></circle>
+<circle cx="325.0" cy="179.9" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 61: complexity 1.861, branching 1.853, 34 states</title></circle>
+<circle cx="306.3" cy="264.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 62: complexity 1.732, branching 1.000, 2 states</title></circle>
+<circle cx="282.2" cy="250.0" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 63: complexity 1.565, branching 1.147, 22 states</title></circle>
+<circle cx="353.7" cy="264.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 64: complexity 2.060, branching 1.000, 17 states</title></circle>
+<circle cx="333.0" cy="264.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 65: complexity 1.917, branching 1.000, 7 states</title></circle>
+<circle cx="306.3" cy="220.4" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 66: complexity 1.732, branching 1.445, 18 states</title></circle>
+<circle cx="313.0" cy="255.7" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 67: complexity 1.778, branching 1.091, 9 states</title></circle>
+<circle cx="410.0" cy="235.2" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 68: complexity 2.449, branching 1.297, 4 states</title></circle>
+<circle cx="295.2" cy="264.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 69: complexity 1.655, branching 1.000, 9 states</title></circle>
+<circle cx="246.2" cy="264.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 70: complexity 1.316, branching 1.000, 4 states</title></circle>
+<circle cx="295.2" cy="213.3" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 71: complexity 1.655, branching 1.517, 34 states</title></circle>
+<circle cx="320.7" cy="264.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 72: complexity 1.831, branching 1.000, 5 states</title></circle>
+<circle cx="227.9" cy="264.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 73: complexity 1.189, branching 1.000, 10 states</title></circle>
+<circle cx="299.0" cy="206.3" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 74: complexity 1.682, branching 1.587, 5 states</title></circle>
+<circle cx="370.7" cy="65.9" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 75: complexity 2.178, branching 3.000, 2 states</title></circle>
+<circle cx="246.2" cy="264.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 76: complexity 1.316, branching 1.000, 10 states</title></circle>
+<circle cx="282.2" cy="172.3" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 77: complexity 1.565, branching 1.929, 16 states</title></circle>
+<circle cx="410.0" cy="225.8" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 78: complexity 2.449, branching 1.391, 47 states</title></circle>
+<circle cx="370.7" cy="130.1" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 79: complexity 2.178, branching 2.354, 37 states</title></circle>
+<circle cx="385.4" cy="146.3" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 80: complexity 2.280, branching 2.191, 44 states</title></circle>
+<circle cx="353.7" cy="237.3" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 81: complexity 2.060, branching 1.275, 24 states</title></circle>
+<circle cx="272.1" cy="233.2" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 82: complexity 1.495, branching 1.316, 9 states</title></circle>
+<circle cx="361.6" cy="155.0" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 83: complexity 2.115, branching 2.104, 2 states</title></circle>
+<circle cx="246.2" cy="364.0" r="3.5" fill="none" stroke="#999" stroke-width="1.2"><title>seed 84: died at step 0</title></circle>
+<circle cx="295.2" cy="250.0" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 85: complexity 1.655, branching 1.147, 3 states</title></circle>
+<circle cx="313.8" cy="364.0" r="3.5" fill="none" stroke="#999" stroke-width="1.2"><title>seed 86: died at step 0</title></circle>
+<circle cx="340.4" cy="255.7" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 87: complexity 1.968, branching 1.091, 2 states</title></circle>
+<circle cx="340.4" cy="364.0" r="3.5" fill="none" stroke="#999" stroke-width="1.2"><title>seed 88: died at step 0</title></circle>
+<circle cx="282.2" cy="364.0" r="3.5" fill="none" stroke="#999" stroke-width="1.2"><title>seed 89: died at step 0</title></circle>
+<circle cx="325.0" cy="239.7" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 90: complexity 1.861, branching 1.251, 35 states</title></circle>
+<circle cx="320.7" cy="245.8" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 91: complexity 1.831, branching 1.189, 3 states</title></circle>
+<circle cx="227.9" cy="364.0" r="3.5" fill="none" stroke="#999" stroke-width="1.2"><title>seed 92: died at step 0</title></circle>
+<circle cx="320.7" cy="223.5" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 93: complexity 1.831, branching 1.414, 3 states</title></circle>
+<circle cx="375.9" cy="161.8" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 94: complexity 2.213, branching 2.035, 74 states</title></circle>
+<circle cx="282.2" cy="364.0" r="3.5" fill="none" stroke="#999" stroke-width="1.2"><title>seed 95: died at step 0</title></circle>
+<circle cx="356.7" cy="123.5" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 96: complexity 2.081, branching 2.421, 50 states</title></circle>
+<circle cx="325.0" cy="255.7" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 97: complexity 1.861, branching 1.091, 17 states</title></circle>
+<circle cx="282.2" cy="205.0" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 98: complexity 1.565, branching 1.600, 17 states</title></circle>
+<circle cx="385.4" cy="65.9" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 99: complexity 2.280, branching 3.000, 2 states</title></circle>
+<circle cx="233.0" cy="264.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 100: complexity 1.225, branching 1.000, 2 states</title></circle>
+<circle cx="299.0" cy="264.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 101: complexity 1.682, branching 1.000, 2 states</title></circle>
+<circle cx="333.0" cy="264.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 102: complexity 1.917, branching 1.000, 2 states</title></circle>
+<circle cx="246.2" cy="364.0" r="3.5" fill="none" stroke="#999" stroke-width="1.2"><title>seed 103: died at step 0</title></circle>
+<circle cx="325.0" cy="364.0" r="3.5" fill="none" stroke="#999" stroke-width="1.2"><title>seed 104: died at step 0</title></circle>
+<circle cx="320.7" cy="165.3" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 105: complexity 1.831, branching 2.000, 2 states</title></circle>
+<circle cx="394.2" cy="163.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 106: complexity 2.340, branching 2.017, 149 states</title></circle>
+<circle cx="295.2" cy="223.5" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 107: complexity 1.655, branching 1.414, 6 states</title></circle>
+<circle cx="282.2" cy="233.2" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 108: complexity 1.565, branching 1.316, 25 states</title></circle>
+<circle cx="313.0" cy="255.7" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 109: complexity 1.778, branching 1.091, 17 states</title></circle>
+<circle cx="394.2" cy="165.3" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 110: complexity 2.340, branching 2.000, 3 states</title></circle>
+<circle cx="470.2" cy="155.0" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 111: complexity 2.866, branching 2.104, 31 states</title></circle>
+<circle cx="385.4" cy="174.9" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 112: complexity 2.280, branching 1.903, 18 states</title></circle>
+<circle cx="361.6" cy="200.8" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 113: complexity 2.115, branching 1.643, 18 states</title></circle>
+<circle cx="306.3" cy="364.0" r="3.5" fill="none" stroke="#999" stroke-width="1.2"><title>seed 114: died at step 0</title></circle>
+<circle cx="266.5" cy="264.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 115: complexity 1.456, branching 1.000, 2 states</title></circle>
+<circle cx="410.0" cy="223.5" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 116: complexity 2.449, branching 1.414, 74 states</title></circle>
+<circle cx="340.4" cy="144.0" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 117: complexity 1.968, branching 2.214, 16 states</title></circle>
+<circle cx="325.0" cy="242.5" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 118: complexity 1.861, branching 1.223, 24 states</title></circle>
+<circle cx="375.9" cy="255.7" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 119: complexity 2.213, branching 1.091, 18 states</title></circle>
+<circle cx="306.3" cy="65.9" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 120: complexity 1.732, branching 3.000, 3 states</title></circle>
+<circle cx="313.0" cy="255.7" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 121: complexity 1.778, branching 1.091, 5 states</title></circle>
+<circle cx="325.0" cy="255.7" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 122: complexity 1.861, branching 1.091, 18 states</title></circle>
+<circle cx="410.0" cy="141.4" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 123: complexity 2.449, branching 2.241, 31 states</title></circle>
+<circle cx="260.4" cy="158.0" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 124: complexity 1.414, branching 2.073, 2 states</title></circle>
+<circle cx="470.2" cy="181.1" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 125: complexity 2.866, branching 1.841, 25 states</title></circle>
+<circle cx="353.7" cy="179.1" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 126: complexity 2.060, branching 1.861, 27 states</title></circle>
+<circle cx="375.9" cy="364.0" r="3.5" fill="none" stroke="#999" stroke-width="1.2"><title>seed 127: died at step 0</title></circle>
+<circle cx="299.0" cy="242.5" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 128: complexity 1.682, branching 1.223, 6 states</title></circle>
+<circle cx="325.0" cy="264.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 129: complexity 1.861, branching 1.000, 4 states</title></circle>
+<circle cx="353.7" cy="250.0" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 130: complexity 2.060, branching 1.147, 24 states</title></circle>
+<circle cx="325.0" cy="231.5" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 131: complexity 1.861, branching 1.334, 45 states</title></circle>
+<circle cx="353.7" cy="185.8" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 132: complexity 2.060, branching 1.793, 86 states</title></circle>
+<circle cx="353.7" cy="264.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 133: complexity 2.060, branching 1.000, 3 states</title></circle>
+<circle cx="299.0" cy="264.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 134: complexity 1.682, branching 1.000, 1 states</title></circle>
+<circle cx="375.9" cy="364.0" r="3.5" fill="none" stroke="#999" stroke-width="1.2"><title>seed 135: died at step 0</title></circle>
+<circle cx="370.7" cy="223.5" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 136: complexity 2.178, branching 1.414, 4 states</title></circle>
+<circle cx="361.6" cy="184.8" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 137: complexity 2.115, branching 1.804, 11 states</title></circle>
+<circle cx="353.7" cy="193.3" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 138: complexity 2.060, branching 1.718, 44 states</title></circle>
+<circle cx="320.7" cy="165.3" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 139: complexity 1.831, branching 2.000, 3 states</title></circle>
+<circle cx="246.2" cy="264.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 140: complexity 1.316, branching 1.000, 2 states</title></circle>
+<circle cx="370.7" cy="222.4" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 141: complexity 2.178, branching 1.425, 4 states</title></circle>
+<circle cx="345.0" cy="165.3" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 142: complexity 2.000, branching 2.000, 2 states</title></circle>
+<circle cx="295.2" cy="181.1" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 143: complexity 1.655, branching 1.841, 29 states</title></circle>
+<circle cx="227.9" cy="264.6" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 144: complexity 1.189, branching 1.000, 2 states</title></circle>
+<circle cx="295.2" cy="364.0" r="3.5" fill="none" stroke="#999" stroke-width="1.2"><title>seed 145: died at step 0</title></circle>
+<circle cx="361.6" cy="181.8" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 146: complexity 2.115, branching 1.834, 95 states</title></circle>
+<circle cx="361.6" cy="255.7" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 147: complexity 2.115, branching 1.091, 14 states</title></circle>
+<circle cx="410.0" cy="176.3" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 148: complexity 2.449, branching 1.889, 13 states</title></circle>
+<circle cx="227.9" cy="223.5" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 149: complexity 1.189, branching 1.414, 3 states</title></circle>
+<circle cx="333.0" cy="206.4" r="4" fill="#2a78d6" stroke="white" stroke-width="1.5"><title>seed 150: complexity 1.917, branching 1.586, 10 states</title></circle>
+</svg>

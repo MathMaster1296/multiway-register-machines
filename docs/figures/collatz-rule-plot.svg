@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="582" height="447" viewBox="0 0 582 447" font-family="Helvetica, Arial, sans-serif">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8f8e88"/></marker></defs>
+<rect width="582" height="447" fill="white"/>
+<path d="M 84.0 192.2 C 84.0 80.2, 140.0 80.2, 140.0 192.2" fill="none" stroke="#2a78d6" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 84.0 248.2 C 84.0 416.0, 476.0 416.0, 476.0 248.2" fill="none" stroke="#eb6834" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 140.0 192.2 C 140.0 80.2, 196.0 80.2, 196.0 192.2" fill="none" stroke="#2a78d6" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 196.0 192.2 C 196.0 80.2, 252.0 80.2, 252.0 192.2" fill="none" stroke="#2a78d6" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 252.0 192.2 C 252.0 39.2, 84.0 39.2, 84.0 192.2" fill="none" stroke="#2a78d6" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 308.0 192.2 C 308.0 80.2, 364.0 80.2, 364.0 192.2" fill="none" stroke="#2a78d6" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 364.0 192.2 C 364.0 80.2, 420.0 80.2, 420.0 192.2" fill="none" stroke="#2a78d6" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 364.0 248.2 C 364.0 347.0, 476.0 347.0, 476.0 248.2" fill="none" stroke="#eb6834" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 420.0 192.2 C 420.0 57.0, 308.0 57.0, 308.0 192.2" fill="none" stroke="#2a78d6" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 420.0 248.2 C 420.0 323.8, 476.0 323.8, 476.0 248.2" fill="none" stroke="#eb6834" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 476.0 192.2 C 476.0 80.2, 532.0 80.2, 532.0 192.2" fill="none" stroke="#2a78d6" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 476.0 248.2 C 476.0 379.8, 252.0 379.8, 252.0 248.2" fill="none" stroke="#eb6834" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 476.0 248.2 C 476.0 347.0, 364.0 347.0, 364.0 248.2" fill="none" stroke="#eb6834" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 532.0 192.2 C 532.0 80.2, 476.0 80.2, 476.0 192.2" fill="none" stroke="#2a78d6" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="61.6" y="197.8" width="44.8" height="44.8" rx="4" fill="rgb(128,128,128)" stroke="#333" stroke-width="1"/>
+<polygon points="75.0,220.2 89.4,213.0 89.4,227.4" fill="#222"/>
+<text x="84.0" y="263.9" text-anchor="middle" font-size="12" fill="#555">1</text>
+<rect x="117.6" y="197.8" width="44.8" height="44.8" rx="4" fill="rgb(204,204,204)" stroke="#333" stroke-width="1"/>
+<polygon points="149.0,220.2 134.6,213.0 134.6,227.4" fill="#222"/>
+<text x="140.0" y="263.9" text-anchor="middle" font-size="12" fill="#555">2</text>
+<rect x="173.6" y="197.8" width="44.8" height="44.8" rx="4" fill="rgb(204,204,204)" stroke="#333" stroke-width="1"/>
+<polygon points="205.0,220.2 190.6,213.0 190.6,227.4" fill="#222"/>
+<text x="196.0" y="263.9" text-anchor="middle" font-size="12" fill="#555">3</text>
+<rect x="229.6" y="197.8" width="44.8" height="44.8" rx="4" fill="rgb(204,204,204)" stroke="#333" stroke-width="1"/>
+<polygon points="261.0,220.2 246.6,213.0 246.6,227.4" fill="#222"/>
+<text x="252.0" y="263.9" text-anchor="middle" font-size="12" fill="#555">4</text>
+<rect x="285.6" y="197.8" width="44.8" height="44.8" rx="4" fill="rgb(204,204,204)" stroke="#333" stroke-width="1"/>
+<polygon points="317.0,220.2 302.6,213.0 302.6,227.4" fill="#222"/>
+<text x="308.0" y="263.9" text-anchor="middle" font-size="12" fill="#555">5</text>
+<rect x="341.6" y="197.8" width="44.8" height="44.8" rx="4" fill="rgb(128,128,128)" stroke="#333" stroke-width="1"/>
+<polygon points="355.0,220.2 369.4,213.0 369.4,227.4" fill="#222"/>
+<text x="364.0" y="263.9" text-anchor="middle" font-size="12" fill="#555">6</text>
+<rect x="397.6" y="197.8" width="44.8" height="44.8" rx="4" fill="rgb(128,128,128)" stroke="#333" stroke-width="1"/>
+<polygon points="411.0,220.2 425.4,213.0 425.4,227.4" fill="#222"/>
+<text x="420.0" y="263.9" text-anchor="middle" font-size="12" fill="#555">7</text>
+<rect x="453.6" y="197.8" width="44.8" height="44.8" rx="4" fill="rgb(204,204,204)" stroke="#333" stroke-width="1"/>
+<polygon points="467.0,220.2 481.4,213.0 481.4,227.4" fill="#222"/>
+<text x="476.0" y="263.9" text-anchor="middle" font-size="12" fill="#555">8</text>
+<rect x="509.6" y="197.8" width="44.8" height="44.8" rx="4" fill="rgb(128,128,128)" stroke="#333" stroke-width="1"/>
+<polygon points="541.0,220.2 526.6,213.0 526.6,227.4" fill="#222"/>
+<text x="532.0" y="263.9" text-anchor="middle" font-size="12" fill="#555">9</text>
+</svg>
